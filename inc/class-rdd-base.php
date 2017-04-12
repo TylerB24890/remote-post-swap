@@ -18,7 +18,7 @@ if(!class_exists('RDD_Base')) :
 		/**
 		 * Holds the user entered options
 		 */
-		protected $options;
+		private $options;
 
 		/**
 		* Executed on class istantiation.
@@ -26,7 +26,6 @@ if(!class_exists('RDD_Base')) :
 		* @since    1.0.0
 		*/
 		public function __construct() {
-
 			$this->options = get_option('rdd-db-url');
 		}
 
