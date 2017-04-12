@@ -122,7 +122,7 @@ if(!class_exists('RDD_Admin')) :
 		* @since    1.0.0
 		*/
     	public function rdd_toggle_input() {
-			echo '<label><input type="checkbox" id="rdd_toggle" name="rdd-db-url[rdd_toggle]" value="1" ' . (isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] == '1' ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
+			echo '<label><input type="checkbox" id="rdd_toggle" name="rdd-db-url[rdd_toggle]" value="1" ' . ($this->rdd_return_toggle() ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
     	}
 
 		/**
@@ -133,7 +133,7 @@ if(!class_exists('RDD_Admin')) :
     	public function rdd_url_input() {
 	        printf(
 	            '<input type="text" id="rdd_url" name="rdd-db-url[rdd_url]" value="%s" style="width: 300px; height: 35px;" placeholder="http://yourwebsite.com"/>',
-	            isset( $this->options['rdd_url'] ) ? esc_attr( $this->options['rdd_url']) : ''
+	            ( $this->rdd_return_url() ? esc_url( $this->rdd_return_url() ) : '' )
 	        );
     	}
 
