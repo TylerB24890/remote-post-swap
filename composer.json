@@ -1,0 +1,14 @@
+{
+	"name": "Remote Dev Database",
+	"description": "Provides an easy way to switch between a remote database and a local database for development purposes",
+	"keywords": ["Development", "remote", "rest api", "api", "rest", "database", "mysql", "db"],
+	"license": "GPL-2.0+",
+	"authors": [
+		{
+			"name": "Tyler Bailey",
+			"email": "tylerb.media@gmail.com",
+			"homepage": "http://tylerb.me"
+		}
+	],
+	"type": "wordpress-plugin"
+}
