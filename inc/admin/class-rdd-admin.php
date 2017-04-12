@@ -26,7 +26,7 @@ if(!class_exists('RDD_Admin')) :
 		public function __construct() {
 
 			if(!is_admin())
-				exit("You must be an administrator.");
+				exit(__("You must be an administrator.", RDD_SLUG));
 
 			parent::__construct();
 
@@ -43,8 +43,8 @@ if(!class_exists('RDD_Admin')) :
 
 			// This page will be under "Settings"
 	        add_options_page(
-	            'Remote Dev Database',
-	            'RDD Settings',
+	            __('Remote Dev Database', RDD_SLUG),
+	            __('RDD Settings', RDD_SLUG),
 	            'manage_options',
 	            'rdd-settings-admin',
 	            array( $this, 'rdd_main_menu_page_render' )
@@ -65,7 +65,7 @@ if(!class_exists('RDD_Admin')) :
 
 	        add_settings_section(
 	            'rdd-settings-section', // ID
-	            __('Remote Development Database Connection', RDD_SLUG), // Title
+	            '', // Title
 	            array( $this, 'rdd_field_description' ), // Callback
 	            'rdd-settings-admin' // Page
 	        );
@@ -112,7 +112,8 @@ if(!class_exists('RDD_Admin')) :
 		* @since    1.0.0
 		*/
 		public function rdd_field_description() {
-			_e('Configure your Remote Database Connection below:', RDD_SLUG);
+			echo "<h3>" . __('Configure your Remote Database Connection below:', RDD_SLUG) . "</h3>";
+			$this->rdd_render_connection_notice();
 		}
 
 		/**
@@ -121,7 +122,7 @@ if(!class_exists('RDD_Admin')) :
 		* @since    1.0.0
 		*/
     	public function rdd_toggle_input() {
-			echo '<label><input type="checkbox" id="rdd_toggle" name="rdd-db-url[rdd_toggle]" value="1" ' . (isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] == '1' ? 'checked="checked"' : '') . '/> ' . (isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] == '1' ? 'Turn remote connection off.' : 'Turn remote connection on.') . '</label>';
+			echo '<label><input type="checkbox" id="rdd_toggle" name="rdd-db-url[rdd_toggle]" value="1" ' . (isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] == '1' ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
     	}
 
 		/**
@@ -143,6 +144,26 @@ if(!class_exists('RDD_Admin')) :
 		*/
 		public function rdd_main_menu_page_render() {
 			include_once(RDD_GLOBAL_DIR . 'inc/admin/partials/settings-page.php');
+		}
+
+		/**
+		* Renders the admin notices to indicate the db connection status
+		*
+		* @since    1.0.0
+		*/
+		private function rdd_render_connection_notice() {
+			if($this->rdd_check_connection()) {
+				$class = "notice-success";
+				$msg = __('Remote Database Connection is active', RDD_SLUG);
+			} elseif($this->rdd_return_toggle() && !$this->rdd_return_url()) {
+				$class = 'notice-error';
+				$msg = __('Your database connection is turned on but you have not provided a valid URL to connect to.', RDD_SLUG);
+			} else {
+				$class = 'notice-warning';
+				$msg = __('Remote Database Connection is not active', RDD_SLUG);
+			}
+
+			echo '<div class="notice is-dismissible ' . $class . '" style="padding: 15px; margin-top: 30px; margin-left: 0;">' . $msg . '</div>';
 		}
 
 	}

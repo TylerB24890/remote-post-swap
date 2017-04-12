@@ -31,18 +31,41 @@ if(!class_exists('RDD_Base')) :
 		}
 
 		/**
-		* Check if the remote database connection is active
+		* Check if the all required variables are set to make the remote DB connection
 		*
 		* @since    1.0.0
 		*/
-		public function rdd_check_connection_options() {
-			if(isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] === true && isset($this->options['rdd_url']) && strlen($this->options['rdd_url']) > 1) {
+		public function rdd_check_connection() {
+			if($this->rdd_return_toggle() && $this->rdd_return_url()) {
 				return true;
 			}
 
 			return false;
 		}
 
+		/**
+		* Check if the user has the remote database connection turned on
+		*
+		* @since    1.0.0
+		*/
+		public function rdd_return_toggle() {
+			if(isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] === true)
+				return true;
+
+			return false;
+		}
+
+		/**
+		* Check if the user has entered a remote database connection URL
+		*
+		* @since    1.0.0
+		*/
+		public function rdd_return_url() {
+			if(isset($this->options['rdd_url']) && strlen($this->options['rdd_url']) > 1)
+				return $this->options['rdd_url'];
+
+			return false;
+		}
 	}
 
 	new RDD_Base();
