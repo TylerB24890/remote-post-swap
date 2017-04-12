@@ -28,8 +28,6 @@ if(!class_exists('RDD_Admin')) :
 			if(!is_admin())
 				exit("You must be an administrator.");
 
-			parent::__construct();
-
 			add_action( 'admin_menu', array( $this, 'rdd_admin_menu_init' ) );
 		}
 
@@ -40,6 +38,14 @@ if(!class_exists('RDD_Admin')) :
 		*/
 		public function rdd_admin_menu_init() {
 
+			// This page will be under "Settings"
+	        add_options_page(
+	            'Remote Dev Database',
+	            'RDD Settings',
+	            'manage_options',
+	            'rdd-setting-admin',
+	            array( $this, 'rdd_main_menu_page_render' )
+	        );
 		}
 
 		/**
