@@ -34,6 +34,8 @@ if(!class_exists('RDD')) :
 		private function load_dependencies() {
 
 			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-base.php');
+			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-retrieve-data.php');
+			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-replace-wp.php');
 
 			if(is_admin())
 				require_once(RDD_GLOBAL_DIR . 'inc/admin/class-rdd-admin.php');

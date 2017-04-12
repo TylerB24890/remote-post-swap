@@ -61,9 +61,19 @@ if(!class_exists('RDD_Base')) :
 		*/
 		public function rdd_return_url() {
 			if(isset($this->options['rdd_url']) && strlen($this->options['rdd_url']) > 1)
-				return $this->options['rdd_url'];
+				return $this->rdd_fix_url($this->options['rdd_url']);
 
 			return false;
+		}
+
+		/**
+		 * Make sure the user entered URL as a slash added to the end of it
+		 * @param  string - $url - URL to modify
+		 * @return  string - modified URL
+		 */
+		private function rdd_fix_url($url) {
+			$furl = str_replace('\\', '/', trim($url));
+			return ( substr($furl, -1) != '/' ) ? $furl .= '/' : $furl;
 		}
 	}
 
