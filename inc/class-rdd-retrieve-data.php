@@ -45,7 +45,7 @@ if(!class_exists('RDD_Retrieve_Data')) :
 			$this->rdd_base_url = $this->rdd_return_url();
 
 			// Endpoint URLs
-			$this->rdd_posts = $this->rdd_base_url . 'wp-json/wp/v2/posts/';
+			$this->rdd_posts = $this->rdd_base_url . 'wp-json/wp/v2/posts';
 			$this->rdd_users = $this->rdd_base_url . 'wp-json/wp/v2/users/';
 		}
 
@@ -55,10 +55,24 @@ if(!class_exists('RDD_Retrieve_Data')) :
 		* @param  int - $id - the ID of the post to retrieve from the API
 		* @since    1.0.0
 		*/
-		public function rdd_get_posts($id = NULL) {
+		public function rdd_get_posts($id, $filters = array()) {
 
-			if($id !== NULL) {
-				$resp = wp_remote_get($this->rdd_posts . $id);
+			if($id != NULL) {
+				$resp = wp_remote_get($this->rdd_posts . '/' . $id);
+			} elseif(!empty($filters)) {
+
+				$fc = 0;
+				$filter_str = '';
+
+				foreach($filters as $key => $filter) {
+					if(is_array($filter)) {
+						$filter = implode(",", $filter);
+					}
+					$filter_str .= ($fc === 0 ? '?' : '&') . $key . '=' . $filter;
+					$fc++;
+				}
+
+				$resp = wp_remote_get($this->rdd_posts . $filter_str);
 			} else {
 				$resp = wp_remote_get($this->rdd_posts);
 			}
