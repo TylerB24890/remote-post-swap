@@ -4,7 +4,7 @@
 * Remote Post Swap Base Class
 *
 * @author 	Tyler Bailey
-* @version 1.0
+* @version 0.5.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
@@ -12,7 +12,7 @@
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 if(!class_exists('RPS_Base')) :
-	
+
 	class RPS_Base {
 
 		/**

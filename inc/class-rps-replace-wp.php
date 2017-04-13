@@ -4,7 +4,7 @@
 * Remote Post Swap replace standard WP functions with API data
 *
 * @author 	Tyler Bailey
-* @version 1.0
+* @version 0.5.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
