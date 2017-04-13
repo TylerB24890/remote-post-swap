@@ -107,7 +107,9 @@ if(!class_exists('RPS_Admin')) :
 			}
 
 			if(isset($input['rps_url'])) {
+				if($this->rps_return_url() != $input['rps_url'])
 				$this->rps_flush_meta();
+
 				$new_input['rps_url'] = esc_url_raw($input['rps_url']);
 			}
 
