@@ -16,30 +16,36 @@ if(!class_exists('RPS_Retrieve_Data')) :
 	class RPS_Retrieve_Data extends RPS_Base {
 
 		/**
-		 * The URL to grab data from -- entered from plugin options page
-		 */
+		* The URL to grab data from -- entered from plugin options page
+		*
+		* @var $rps_base_url
+		*/
 		protected $rps_base_url;
 
 		/**
-		 * The API endpoint for posts
-		 */
+		* The API endpoint for posts
+		*
+		* @var $rps_posts
+		*/
 		protected $rps_posts;
 
 		/**
-		 * The API endpoint for users
-		 */
+		* The API endpoint for users
+		*
+		* @var $rps_users
+		*/
 		protected $rps_users;
 
 		/**
 		* Executed on class istantiation.
 		*
-		* @since    1.0.0
+		* @since    0.5.0
 		*/
 		public function __construct() {
 			parent::__construct();
 
 			if(!$this->rps_check_connection())
-				return false;
+			return false;
 
 			// Base URL from user entered options
 			$this->rps_base_url = $this->rps_return_url();
@@ -48,13 +54,14 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';
 			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users/';
 		}
-
+		
 		/**
 		* Retrieves the posts from the target site API
 		*
 		* @param  $id - int - the ID of the post to retrieve from the API
 		* @param  $filters - array - Array of API filters
-		* @since    1.0.0
+		* @return	$posts - array - Array of post data returned from API
+		* @since    0.5.0
 		*/
 		public function rps_get_posts($id, $filters = array()) {
 
@@ -86,7 +93,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$posts = json_decode( wp_remote_retrieve_body( $resp ));
 
 			if(empty($posts))
-				return array();
+			return array();
 
 
 			return $posts;
@@ -96,7 +103,8 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* Retrieves the users from the target site API
 		*
 		* @param  $id - int - the ID of the user to retrieve from the API
-		* @since    1.0.0
+		* @return	$users - array - array of user data returned from API
+		* @since    0.5.0
 		*/
 		public function rps_get_users($id = NULL) {
 
@@ -114,7 +122,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$users = json_decode( wp_remote_retrieve_body( $resp ));
 
 			if(empty($users))
-				return array();
+			return array();
 
 			return $users;
 		}

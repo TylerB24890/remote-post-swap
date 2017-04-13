@@ -21,12 +21,12 @@ if(!class_exists('RPS_Admin')) :
 		* Constructs parent object
 		* Adds menu pages on class load
 		*
-		* @since    1.0.0
+		* @since    0.5.0
 		*/
 		public function __construct() {
 
 			if(!is_admin())
-				exit(__("You must be an administrator.", RPS_SLUG));
+			exit(__("You must be an administrator.", RPS_SLUG));
 
 			parent::__construct();
 
@@ -37,60 +37,64 @@ if(!class_exists('RPS_Admin')) :
 		/**
 		* Creates the top-level admin menu page
 		*
-		* @since    1.0.0
+		* @return	null
+		* @since    0.5.0
 		*/
 		public function rps_admin_menu_init() {
 
 			// This page will be under "Settings"
-	        add_options_page(
-	            __('Remote Post Swap', RPS_SLUG),
-	            __('RPS Settings', RPS_SLUG),
-	            'manage_options',
-	            'rps-settings-admin',
-	            array( $this, 'rps_main_menu_page_render' )
-	        );
+			add_options_page(
+				__('Remote Post Swap', RPS_SLUG),
+				__('RPS Settings', RPS_SLUG),
+				'manage_options',
+				'rps-settings-admin',
+				array( $this, 'rps_main_menu_page_render' )
+			);
 		}
 
 		/**
 		* Registers and adds settings to admin page
 		*
-		* @since    1.0.0
+		* @return	null
+		* @since    0.5.0
 		*/
-	    public function rps_settings_init() {
-	        register_setting(
-	            'rps-settings', // Option group
-	            'rps-db-url', // Option name
-	            array( $this, 'rps_validate_options' ) // Sanitize
-	        );
+		public function rps_settings_init() {
+			register_setting(
+				'rps-settings', // Option group
+				'rps-db-url', // Option name
+				array( $this, 'rps_validate_options' ) // Sanitize
+			);
 
-	        add_settings_section(
-	            'rps-settings-section', // ID
-	            '', // Title
-	            array( $this, 'rps_field_description' ), // Callback
-	            'rps-settings-admin' // Page
-	        );
+			add_settings_section(
+				'rps-settings-section', // ID
+				'', // Title
+				array( $this, 'rps_field_description' ), // Callback
+				'rps-settings-admin' // Page
+			);
 
 			add_settings_field(
-	            'rps_toggle',
-	            __('Connect to remote database:', RPS_SLUG),
-	            array( $this, 'rps_toggle_input' ),
-	            'rps-settings-admin',
-	            'rps-settings-section'
-	        );
+				'rps_toggle',
+				__('Connect to remote database:', RPS_SLUG),
+				array( $this, 'rps_toggle_input' ),
+				'rps-settings-admin',
+				'rps-settings-section'
+			);
 
-	        add_settings_field(
-	            'rps_url',
-	            __('Website URL:', RPS_SLUG),
-	            array( $this, 'rps_url_input' ),
-	            'rps-settings-admin',
-	            'rps-settings-section'
-	        );
-	    }
+			add_settings_field(
+				'rps_url',
+				__('Website URL:', RPS_SLUG),
+				array( $this, 'rps_url_input' ),
+				'rps-settings-admin',
+				'rps-settings-section'
+			);
+		}
 
 		/**
 		* Validate the options for saving into the database
 		*
-		* @since    1.0.0
+		* @param  	$input - array - array of submitted form data
+		* @return	$new_input - array - validated/formatted form data
+		* @since    0.5.0
 		*/
 		public function rps_validate_options($input) {
 			$new_input = array();
@@ -109,7 +113,8 @@ if(!class_exists('RPS_Admin')) :
 		/**
 		* Renders help text for the RPS URL field
 		*
-		* @since    1.0.0
+		* @return	string
+		* @since    0.5.0
 		*/
 		public function rps_field_description() {
 			echo "<h3>" . __('Configure your Remote Database Connection below:', RPS_SLUG) . "</h3>";
@@ -119,28 +124,31 @@ if(!class_exists('RPS_Admin')) :
 		/**
 		* Renders the RPS Toggle Checkbox to turn on & off the remote db connection
 		*
-		* @since    1.0.0
+		* @return	string
+		* @since    0.5.0
 		*/
-    	public function rps_toggle_input() {
+		public function rps_toggle_input() {
 			echo '<label><input type="checkbox" id="rps_toggle" name="rps-db-url[rps_toggle]" value="1" ' . ($this->rps_return_toggle() ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
-    	}
+		}
 
 		/**
 		* Renders the RPS URL input field & populates it with saved data
 		*
-		* @since    1.0.0
+		* @return 	string
+		* @since    0.5.0
 		*/
-    	public function rps_url_input() {
-	        printf(
-	            '<input type="text" id="rps_url" name="rps-db-url[rps_url]" value="%s" style="width: 300px; height: 35px;" placeholder="http://yourwebsite.com"/>',
-	            ( $this->rps_return_url() ? esc_url( $this->rps_return_url() ) : '' )
-	        );
-    	}
+		public function rps_url_input() {
+			printf(
+				'<input type="text" id="rps_url" name="rps-db-url[rps_url]" value="%s" style="width: 300px; height: 35px;" placeholder="http://yourwebsite.com"/>',
+				( $this->rps_return_url() ? esc_url( $this->rps_return_url() ) : '' )
+			);
+		}
 
 		/**
 		* Loads the landing page markup from admin partials
 		*
-		* @since    1.0.0
+		* @return	file
+		* @since    0.5.0
 		*/
 		public function rps_main_menu_page_render() {
 			include_once(RPS_GLOBAL_DIR . 'inc/admin/partials/settings-page.php');
@@ -149,7 +157,8 @@ if(!class_exists('RPS_Admin')) :
 		/**
 		* Renders the admin notices to indicate the db connection status
 		*
-		* @since    1.0.0
+		* @return	string
+		* @since    0.5.0
 		*/
 		private function rps_render_connection_notice() {
 			if($this->rps_check_connection()) {

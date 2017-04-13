@@ -18,25 +18,26 @@ if(!class_exists('RPS_Replace_WP')) :
 		/**
 		* Executed on class istantiation.
 		*
-		* @since    1.0.0
+		* @since    0.5.0
 		*/
 		public function __construct() {
 			parent::__construct();
 
 			if($this->rps_check_connection())
-				add_filter( 'the_posts', array($this, 'rps_swap_post_data'), 10, 3 );
+			add_filter( 'the_posts', array($this, 'rps_swap_post_data'), 10, 3 );
 		}
 
 		/**
 		* Executed just after the posts are selected from wp_query.
 		* @param  $posts - object - WP Post Object
 		* @param  $query - object - WP SQL Query Object
-		* @since    1.0.0
+		* @return	$posts - object - WP Post Object
+		* @since    0.5.0
 		*/
 		public function rps_swap_post_data($posts, $query = false) {
 
 			if(is_admin() || !is_main_query())
-				return $posts;
+			return $posts;
 
 			if(is_single()) {
 				$posts = $this->rps_swap_single_post($posts[0]);
@@ -53,12 +54,12 @@ if(!class_exists('RPS_Replace_WP')) :
 		* @param  $post - object - WP Post Object
 		* @param  $rps_id - int - ID of the remote post to retrieve
 		* @return  $posts - WP Post Object
-		* @since    1.0.0
+		* @since    0.5.0
 		*/
 		private function rps_swap_single_post($post, $rps_id = NULL) {
 
 			if($rps_id === NULL)
-				$rps_id = get_transient('rps_post_match_' . $post->ID);
+			$rps_id = get_transient('rps_post_match_' . $post->ID);
 
 			$rpsp = $this->rps_get_posts($rps_id);
 
@@ -76,7 +77,7 @@ if(!class_exists('RPS_Replace_WP')) :
 		*
 		* @param  $posts - object - WP Posts Object
 		* @return  $posts - WP Post Object
-		* @since    1.0.0
+		* @since    0.5.0
 		*/
 		private function rps_swap_loop_posts($posts) {
 			// Get the total post count queried
