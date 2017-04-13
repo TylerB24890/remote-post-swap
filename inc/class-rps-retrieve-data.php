@@ -1,34 +1,34 @@
 <?php
 
 /**
-* Remote Dev Database retrieve data from API endpoints
+* Remote Post Swap retrieve data from API endpoints
 *
 * @author 	Tyler Bailey
 * @version 1.0
-* @package remote-dev-database
-* @subpackage remote-dev-database/inc
+* @package remote-post-swap
+* @subpackage remote-post-swap/inc
 */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RDD_Retrieve_Data')) :
+if(!class_exists('RPS_Retrieve_Data')) :
 
-	class RDD_Retrieve_Data extends RDD_Base {
+	class RPS_Retrieve_Data extends RPS_Base {
 
 		/**
 		 * The URL to grab data from -- entered from plugin options page
 		 */
-		protected $rdd_base_url;
+		protected $rps_base_url;
 
 		/**
 		 * The API endpoint for posts
 		 */
-		protected $rdd_posts;
+		protected $rps_posts;
 
 		/**
 		 * The API endpoint for users
 		 */
-		protected $rdd_users;
+		protected $rps_users;
 
 		/**
 		* Executed on class istantiation.
@@ -38,15 +38,15 @@ if(!class_exists('RDD_Retrieve_Data')) :
 		public function __construct() {
 			parent::__construct();
 
-			if(!$this->rdd_check_connection())
+			if(!$this->rps_check_connection())
 				return false;
 
 			// Base URL from user entered options
-			$this->rdd_base_url = $this->rdd_return_url();
+			$this->rps_base_url = $this->rps_return_url();
 
 			// Endpoint URLs
-			$this->rdd_posts = $this->rdd_base_url . 'wp-json/wp/v2/posts';
-			$this->rdd_users = $this->rdd_base_url . 'wp-json/wp/v2/users/';
+			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';
+			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users/';
 		}
 
 		/**
@@ -55,10 +55,10 @@ if(!class_exists('RDD_Retrieve_Data')) :
 		* @param  int - $id - the ID of the post to retrieve from the API
 		* @since    1.0.0
 		*/
-		public function rdd_get_posts($id, $filters = array()) {
+		public function rps_get_posts($id, $filters = array()) {
 
 			if($id != NULL) {
-				$resp = wp_remote_get($this->rdd_posts . '/' . $id);
+				$resp = wp_remote_get($this->rps_posts . '/' . $id);
 			} elseif(!empty($filters)) {
 
 				$fc = 0;
@@ -72,9 +72,9 @@ if(!class_exists('RDD_Retrieve_Data')) :
 					$fc++;
 				}
 
-				$resp = wp_remote_get($this->rdd_posts . $filter_str);
+				$resp = wp_remote_get($this->rps_posts . $filter_str);
 			} else {
-				$resp = wp_remote_get($this->rdd_posts);
+				$resp = wp_remote_get($this->rps_posts);
 			}
 
 			if(is_wp_error( $resp )) {
@@ -97,12 +97,12 @@ if(!class_exists('RDD_Retrieve_Data')) :
 		* @param  int - $id - the ID of the user to retrieve from the API
 		* @since    1.0.0
 		*/
-		public function rdd_get_users($id = NULL) {
+		public function rps_get_users($id = NULL) {
 
 			if($id !== NULL) {
-				$resp = wp_remote_get($this->rdd_users . $id);
+				$resp = wp_remote_get($this->rps_users . $id);
 			} else {
-				$resp = wp_remote_get($this->rdd_users);
+				$resp = wp_remote_get($this->rps_users);
 			}
 
 			if(is_wp_error( $resp )) {
@@ -119,6 +119,6 @@ if(!class_exists('RDD_Retrieve_Data')) :
 		}
 	}
 
-	new RDD_Retrieve_Data();
+	new RPS_Retrieve_Data();
 
 endif;

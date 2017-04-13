@@ -1,5 +1,5 @@
 {
-	"name": "Remote Dev Database",
+	"name": "Remote Post Swap",
 	"description": "Provides an easy way to switch between a remote database and a local database for development purposes",
 	"keywords": ["Development", "remote", "rest api", "api", "rest", "database", "mysql", "db"],
 	"license": "GPL-2.0+",

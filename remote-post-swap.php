@@ -10,18 +10,18 @@
 *
 * @link              	  http://tylerb.me
 * @since             	 1.0.0
-* @package            rdd
+* @package            rps
 *
 * @wordpress-plugin
-* Plugin Name:        Remote Dev Database
-* Plugin URI:        	http://tylerb.me/plugins/remote-dev-database.zip
+* Plugin Name:        Remote Post Swap
+* Plugin URI:        	http://tylerb.me/plugins/remote-post-swap.zip
 * Description:       	Provides an easy way to switch between a remote database and a local database for development purposes
 * Version:           	 1.0.0
 * Author:            	 Tyler Bailey
 * Author URI:          http://tylerb.me
 * License:           	 GPL-2.0+
 * License URI:         http://www.gnu.org/licenses/gpl-2.0.txt
-* Text Domain:       rdd
+* Text Domain:       rps
 */
 
 
@@ -32,47 +32,47 @@ if ( ! defined( 'WPINC' ) ) {
 }
 
 // Define constants
-define('RDD_VERSION', '1.0.0');
-define('RDD_SLUG', 'rdd');
-define('RDD_GLOBAL_DIR', plugin_dir_path( __FILE__ ));
-define('RDD_GLOBAL_URL', plugin_dir_url( __FILE__ ));
-define('RDD_REQUIRED_PHP_VERSION', '5.3');
-define('RDD_REQUIRED_WP_VERSION',  '3.1');
+define('RPS_VERSION', '1.0.0');
+define('RPS_SLUG', 'rps');
+define('RPS_GLOBAL_DIR', plugin_dir_path( __FILE__ ));
+define('RPS_GLOBAL_URL', plugin_dir_url( __FILE__ ));
+define('RPS_REQUIRED_PHP_VERSION', '5.3');
+define('RPS_REQUIRED_WP_VERSION',  '3.1');
 
 /**
  * The code that runs during plugin activation.
- * This action is documented in includes/class-rdd-activator.php
+ * This action is documented in includes/class-rps-activator.php
  */
-function activate_rdd() {
-	require_once RDD_GLOBAL_DIR . 'inc/class-rdd-activator.php';
-	RDD_Activator::activate();
+function activate_rps() {
+	require_once RPS_GLOBAL_DIR . 'inc/class-rps-activator.php';
+	RPS_Activator::activate();
 }
 /**
  * The code that runs during plugin deactivation.
- * This action is documented in includes/class-rdd-deactivator.php
+ * This action is documented in includes/class-rps-deactivator.php
  */
-function deactivate_rdd() {
-	require_once RDD_GLOBAL_DIR . 'inc/class-rdd-deactivator.php';
-	RDD_Deactivator::deactivate();
+function deactivate_rps() {
+	require_once RPS_GLOBAL_DIR . 'inc/class-rps-deactivator.php';
+	RPS_Deactivator::deactivate();
 }
-register_activation_hook( __FILE__, 'activate_rdd' );
-register_deactivation_hook( __FILE__, 'deactivate_rdd' );
+register_activation_hook( __FILE__, 'activate_rps' );
+register_deactivation_hook( __FILE__, 'deactivate_rps' );
 
 
 /**
  * The core plugin classes that is used to define internationalization,
  * admin-specific hooks, and public-facing site hooks.
  */
-require RDD_GLOBAL_DIR .  'inc/class-rdd.php';
+require RPS_GLOBAL_DIR .  'inc/class-rps.php';
 
 /**
  * Begins execution of the plugin.
  *
  * @since    1.0.0
  */
-if(!function_exists('rdd_init')) {
-	function rdd_init() {
-		new RDD();
+if(!function_exists('rps_init')) {
+	function rps_init() {
+		new RPS();
 	}
 }
-add_action('init', 'rdd_init');
+add_action('init', 'rps_init');

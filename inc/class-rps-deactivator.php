@@ -6,15 +6,15 @@
  *
  * @author 	Tyler Bailey
  * @version 1.0.0
- * @package remote-dev-database
- * @subpackage remote-dev-database/inc
+ * @package remote-post-swap
+ * @subpackage remote-post-swap/inc
  */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RDD_Deactivator')) :
+if(!class_exists('RPS_Deactivator')) :
 
-	class RDD_Deactivator {
+	class RPS_Deactivator {
 
 		/**
 		 * Fired on plugin deactivation

@@ -1,4 +1,4 @@
-=== Remote Dev Database ===
+=== Remote Post Swap ===
 Contributors: TyB
 Tags: Development, remote, rest api, api, rest, database, mysql, db
 Requires at least: 3.2
@@ -11,7 +11,7 @@ Provides an easy way to switch between a remote database and a local database fo
 
 == Installation ==
 
-1. Upload the `remote-dev-database` directory to your `/wp-content/plugins/` directory.
+1. Upload the `remote-post-swap` directory to your `/wp-content/plugins/` directory.
 2. Activate the plugin.
 
 == Usage ==

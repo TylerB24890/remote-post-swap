@@ -4,7 +4,7 @@
  *
  * @link       http://tylerb.me
  * @since      1.0.0
- * @package    rdd
+ * @package    rps
  */
 
 // If uninstall not called from WordPress, then exit.

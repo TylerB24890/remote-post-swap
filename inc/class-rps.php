@@ -1,19 +1,19 @@
 <?php
 
 /**
- * Remote Dev Database Plugin Bootstrap File
+ * Remote Post Swap Plugin Bootstrap File
  *
  * @author 	Tyler Bailey
  * @version 1.0
- * @package remote-dev-database
- * @subpackage remote-dev-database/inc
+ * @package remote-post-swap
+ * @subpackage remote-post-swap/inc
  */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RDD')) :
+if(!class_exists('RPS')) :
 
-	class RDD {
+	class RPS {
 
 		/**
 		 * Plugin initialization functions
@@ -33,12 +33,12 @@ if(!class_exists('RDD')) :
 		 */
 		private function load_dependencies() {
 
-			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-base.php');
-			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-retrieve-data.php');
-			require_once(RDD_GLOBAL_DIR . 'inc/class-rdd-replace-wp.php');
+			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-base.php');
+			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-retrieve-data.php');
+			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-replace-wp.php');
 
 			if(is_admin())
-				require_once(RDD_GLOBAL_DIR . 'inc/admin/class-rdd-admin.php');
+				require_once(RPS_GLOBAL_DIR . 'inc/admin/class-rps-admin.php');
 
 		}
 
@@ -48,7 +48,7 @@ if(!class_exists('RDD')) :
 		 * @since   1.0.0
 		 */
 		private function set_locale() {
-			load_plugin_textdomain( RDD_SLUG, false, RDD_GLOBAL_DIR . 'language' );
+			load_plugin_textdomain( RPS_SLUG, false, RPS_GLOBAL_DIR . 'language' );
 	    }
 
 	}

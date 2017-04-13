@@ -1,19 +1,19 @@
 <?php
 
 /**
-* Remote Dev Database Base Class
+* Remote Post Swap Base Class
 *
 * @author 	Tyler Bailey
 * @version 1.0
-* @package remote-dev-database
-* @subpackage remote-dev-database/inc
+* @package remote-post-swap
+* @subpackage remote-post-swap/inc
 */
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RDD_Base')) :
+if(!class_exists('RPS_Base')) :
 
-	class RDD_Base {
+	class RPS_Base {
 
 		/**
 		 * Holds the user entered options
@@ -26,7 +26,7 @@ if(!class_exists('RDD_Base')) :
 		* @since    1.0.0
 		*/
 		public function __construct() {
-			$this->options = get_option('rdd-db-url');
+			$this->options = get_option('rps-db-url');
 		}
 
 		/**
@@ -34,8 +34,8 @@ if(!class_exists('RDD_Base')) :
 		*
 		* @since    1.0.0
 		*/
-		public function rdd_check_connection() {
-			if($this->rdd_return_toggle() && $this->rdd_return_url()) {
+		public function rps_check_connection() {
+			if($this->rps_return_toggle() && $this->rps_return_url()) {
 				return true;
 			}
 
@@ -47,8 +47,8 @@ if(!class_exists('RDD_Base')) :
 		*
 		* @since    1.0.0
 		*/
-		public function rdd_return_toggle() {
-			if(isset($this->options['rdd_toggle']) && $this->options['rdd_toggle'] === true)
+		public function rps_return_toggle() {
+			if(isset($this->options['rps_toggle']) && $this->options['rps_toggle'] === true)
 				return true;
 
 			return false;
@@ -59,9 +59,9 @@ if(!class_exists('RDD_Base')) :
 		*
 		* @since    1.0.0
 		*/
-		public function rdd_return_url() {
-			if(isset($this->options['rdd_url']) && strlen($this->options['rdd_url']) > 1)
-				return $this->rdd_fix_url($this->options['rdd_url']);
+		public function rps_return_url() {
+			if(isset($this->options['rps_url']) && strlen($this->options['rps_url']) > 1)
+				return $this->rps_fix_url($this->options['rps_url']);
 
 			return false;
 		}
@@ -71,12 +71,12 @@ if(!class_exists('RDD_Base')) :
 		 * @param  string - $url - URL to modify
 		 * @return  string - modified URL
 		 */
-		private function rdd_fix_url($url) {
+		private function rps_fix_url($url) {
 			$furl = str_replace('\\', '/', trim($url));
 			return ( substr($furl, -1) != '/' ) ? $furl .= '/' : $furl;
 		}
 	}
 
-	new RDD_Base();
+	new RPS_Base();
 
 endif;
