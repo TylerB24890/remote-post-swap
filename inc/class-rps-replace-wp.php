@@ -82,7 +82,6 @@ if(!class_exists('RPS_Replace_WP')) :
 			// Get the total post count queried
 			$post_count = count($posts);
 			$new_post_ids = array();
-			$og_post_ids = array();
 			$npc = 0;
 
 			foreach($posts as $post) {
