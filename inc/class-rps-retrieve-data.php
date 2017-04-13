@@ -52,12 +52,13 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		/**
 		* Retrieves the posts from the target site API
 		*
-		* @param  int - $id - the ID of the post to retrieve from the API
+		* @param  $id - int - the ID of the post to retrieve from the API
+		* @param  $filters - array - Array of API filters
 		* @since    1.0.0
 		*/
 		public function rps_get_posts($id, $filters = array()) {
 
-			if($id != NULL) {
+			if($id != NULL && $id != FALSE) {
 				$resp = wp_remote_get($this->rps_posts . '/' . $id);
 			} elseif(!empty($filters)) {
 
@@ -94,7 +95,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		/**
 		* Retrieves the users from the target site API
 		*
-		* @param  int - $id - the ID of the user to retrieve from the API
+		* @param  $id - int - the ID of the user to retrieve from the API
 		* @since    1.0.0
 		*/
 		public function rps_get_users($id = NULL) {

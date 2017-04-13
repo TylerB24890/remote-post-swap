@@ -37,7 +37,7 @@ define('RPS_SLUG', 'rps');
 define('RPS_GLOBAL_DIR', plugin_dir_path( __FILE__ ));
 define('RPS_GLOBAL_URL', plugin_dir_url( __FILE__ ));
 define('RPS_REQUIRED_PHP_VERSION', '5.3');
-define('RPS_REQUIRED_WP_VERSION',  '3.1');
+define('RPS_REQUIRED_WP_VERSION',  '4.7');
 
 /**
  * The code that runs during plugin activation.

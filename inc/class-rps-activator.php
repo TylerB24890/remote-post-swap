@@ -40,7 +40,7 @@ if(!class_exists('RPS_Activator')) :
 				wp_die(__("PHP 5.3 is required to run this plugin.", RPS_SLUG), __('Incompatible PHP Version', RPS_SLUG));
 			}
 			if ( version_compare( $wp_version, RPS_REQUIRED_WP_VERSION, '<' ) ) {
-				wp_die(__("You must be running at least WordPress 3.5 for this plugin to function properly.", RPS_SLUG), __('Incompatible WordPress Version.', RPS_SLUG));
+				wp_die(__("You must be running at least WordPress 4.7 for this plugin to function properly.", RPS_SLUG), __('Incompatible WordPress Version.', RPS_SLUG));
 			}
 
 			return true;
