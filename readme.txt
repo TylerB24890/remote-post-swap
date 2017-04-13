@@ -12,7 +12,7 @@ This plugin was built for developers to swap out local post data with post data 
 
 All posts within the loop are replaced with posts from the URL you entered. This will change out the post title, post content, post excerpt and post date with the returned API data. This plugin will **NOT** replace your the post data in the database, but simply change out the data on the fly. To go back to your the posts saved locally simply uncheck the toggle switch on the settings page.
 
-Transients are used to store post IDs returned from the API call and matched up with the post IDs returned from your loop. This helps keep posts consistent across page loads. Single post pages will return the same post they were swapped out with in the main loop.
+Post meta is used to store post IDs returned from the API call and matched up with the post IDs returned from your loop. This helps keep posts consistent across page loads. Single post pages will return the same post they were swapped out with in the main loop.
 
 **NOTE:** This plugin requires the parent site (the live site) to be running at least WordPress Version 4.7.0 for the REST API to work properly.
 
@@ -26,6 +26,11 @@ Transients are used to store post IDs returned from the API call and matched up 
 2. Click on the 'Remote Post Swap' link.
 3. Check the toggle box shown.
 4. Enter the URL to the live site you wish to pull posts from. This should be a valid URL.
+
+== To Do ==
+1. Pull in author data.
+2. Pull in post comments.
+3. Allow users to choose which data to swap via toggle options on settings page.
 
 == Changelog ==
 

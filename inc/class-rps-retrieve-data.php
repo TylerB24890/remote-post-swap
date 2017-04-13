@@ -19,6 +19,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* The URL to grab data from -- entered from plugin options page
 		*
 		* @var $rps_base_url
+		* @since 0.5.0
 		*/
 		protected $rps_base_url;
 
@@ -26,6 +27,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* The API endpoint for posts
 		*
 		* @var $rps_posts
+		* @since 0.5.0
 		*/
 		protected $rps_posts;
 
@@ -33,8 +35,25 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* The API endpoint for users
 		*
 		* @var $rps_users
+		* @since 0.5.0
 		*/
 		protected $rps_users;
+
+		/**
+		* The API endpoint for media
+		*
+		* @var $rps_media
+		* @since 0.5.0
+		*/
+		protected $rps_media;
+
+		/**
+		* The API arguments
+		*
+		* @var $rps_media
+		* @since 0.5.0
+		*/
+		protected $rps_remote_args;
 
 		/**
 		* Executed on class istantiation.
@@ -52,9 +71,14 @@ if(!class_exists('RPS_Retrieve_Data')) :
 
 			// Endpoint URLs
 			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';
-			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users/';
+			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users';
+			$this->rps_media = $this->rps_base_url . 'wp-json/wp/v2/media';
+
+			$this->rps_remote_args = array(
+				'sslverify' => false
+			);
 		}
-		
+
 		/**
 		* Retrieves the posts from the target site API
 		*
@@ -63,10 +87,12 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* @return	$posts - array - Array of post data returned from API
 		* @since    0.5.0
 		*/
-		public function rps_get_posts($id, $filters = array()) {
+		protected function rps_get_posts($id, $filters = array()) {
+
+			$posts = false;
 
 			if($id != NULL && $id != FALSE) {
-				$resp = wp_remote_get($this->rps_posts . '/' . $id);
+				$resp = wp_remote_get($this->rps_posts . '/' . $id, $this->rps_remote_args);
 			} elseif(!empty($filters)) {
 
 				$fc = 0;
@@ -80,21 +106,21 @@ if(!class_exists('RPS_Retrieve_Data')) :
 					$fc++;
 				}
 
-				$resp = wp_remote_get($this->rps_posts . $filter_str);
+				$resp = wp_remote_get($this->rps_posts . $filter_str, $this->rps_remote_args);
+
+
 			} else {
-				$resp = wp_remote_get($this->rps_posts);
+				$resp = wp_remote_get($this->rps_posts, $this->rps_remote_args);
 			}
 
 			if(is_wp_error( $resp )) {
-				echo $resp->get_error_message();
 				return false;
 			}
 
 			$posts = json_decode( wp_remote_retrieve_body( $resp ));
 
-			if(empty($posts))
-			return array();
-
+			if(empty($posts) || isset($posts->data->status) && $posts->data->status === 404)
+			return false;
 
 			return $posts;
 		}
@@ -106,25 +132,53 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		* @return	$users - array - array of user data returned from API
 		* @since    0.5.0
 		*/
-		public function rps_get_users($id = NULL) {
+		protected function rps_get_users($id = NULL) {
+
+			$users = false;
 
 			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_users . $id);
+				$resp = wp_remote_get($this->rps_users . $id, $this->rps_remote_args);
 			} else {
-				$resp = wp_remote_get($this->rps_users);
+				$resp = wp_remote_get($this->rps_users, $this->rps_remote_args);
 			}
 
 			if(is_wp_error( $resp )) {
-				echo $resp->get_error_message();
 				return false;
 			}
 
 			$users = json_decode( wp_remote_retrieve_body( $resp ));
 
 			if(empty($users))
-			return array();
+			return false;
 
 			return $users;
+		}
+
+		/**
+		* Retrieves featured image/media information from the API
+		*
+		* @param   $id - int - the ID of the media element to grab
+		* @return	$media - array - array of media data returned from API
+		* @since    0.5.0
+		*/
+		protected function rps_get_media($id) {
+
+			$media = false;
+
+			if($id !== NULL) {
+				$resp = wp_remote_get($this->rps_media . '/' . $id, $this->rps_remote_args);
+			}
+
+			if(is_wp_error($resp)) {
+				return false;
+			}
+
+			$media = json_decode( wp_remote_retrieve_body( $resp ) );
+
+			if(empty($media))
+			return false;
+
+			return $media;
 		}
 	}
 

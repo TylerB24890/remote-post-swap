@@ -16,7 +16,18 @@ if(!class_exists('RPS_Base')) :
 	class RPS_Base {
 
 		/**
+		* The RPS post meta key
+		*
+		* @var $rps_meta
+		* @since 0.5.0
+		*/
+		public $rps_meta;
+
+		/**
 		* Holds the user entered options
+		*
+		* @var $options
+		* @since 0.5.0
 		*/
 		private $options;
 
@@ -27,6 +38,8 @@ if(!class_exists('RPS_Base')) :
 		*/
 		public function __construct() {
 			$this->options = get_option('rps-db-url');
+
+			$this->rps_meta = 'rps_post_id';
 		}
 
 		/**
@@ -57,6 +70,7 @@ if(!class_exists('RPS_Base')) :
 		/**
 		* Check if the user has entered a remote database connection URL
 		*
+		* @return	string || bool
 		* @since    0.5.0
 		*/
 		public function rps_return_url() {
@@ -68,12 +82,23 @@ if(!class_exists('RPS_Base')) :
 
 		/**
 		* Make sure the user entered URL as a slash added to the end of it
+		*
 		* @param  string - $url - URL to modify
 		* @return  string - modified URL
 		*/
 		private function rps_fix_url($url) {
 			$furl = str_replace('\\', '/', trim($url));
 			return ( substr($furl, -1) != '/' ) ? $furl .= '/' : $furl;
+		}
+
+		/**
+		* Check if post has a remote post ID attached
+		*
+		* @param  int - $pid - Post ID to retrieve meta for
+		* @return  int || bool
+		*/
+		public function rps_get_post_meta($pid) {
+			return get_post_meta($pid, $this->rps_meta, true);
 		}
 	}
 

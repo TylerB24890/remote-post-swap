@@ -32,6 +32,9 @@ if(!class_exists('RPS_Admin')) :
 
 			add_action( 'admin_menu', array( $this, 'rps_admin_menu_init' ) );
 			add_action( 'admin_init', array( $this, 'rps_settings_init' ) );
+
+			add_action( 'wp_ajax_rps_delete_meta', array($this, 'rps_flush_meta') );
+			add_action( 'wp_ajax_nopriv_rps_delete_meta', array($this, 'rps_flush_meta' ));
 		}
 
 		/**
@@ -104,6 +107,7 @@ if(!class_exists('RPS_Admin')) :
 			}
 
 			if(isset($input['rps_url'])) {
+				$this->rps_flush_meta();
 				$new_input['rps_url'] = esc_url_raw($input['rps_url']);
 			}
 
@@ -175,6 +179,15 @@ if(!class_exists('RPS_Admin')) :
 			echo '<div class="notice is-dismissible ' . $class . '" style="padding: 15px; margin-top: 30px; margin-left: 0;">' . $msg . '</div>';
 		}
 
+		/**
+		* AJAX Function to delete all RPS post meta
+		*
+		* @return	null
+		* @since    0.5.0
+		*/
+		public function rps_flush_meta() {
+			delete_post_meta_by_key( $this->rps_meta );
+		}
 	}
 
 	new RPS_Admin();
