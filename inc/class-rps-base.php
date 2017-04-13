@@ -45,6 +45,7 @@ if(!class_exists('RPS_Base')) :
 		/**
 		* Check if the all required variables are set to make the remote DB connection
 		*
+		* @return  	bool
 		* @since    0.5.0
 		*/
 		public function rps_check_connection() {
@@ -58,6 +59,7 @@ if(!class_exists('RPS_Base')) :
 		/**
 		* Check if the user has the remote database connection turned on
 		*
+		* @return	bool
 		* @since    0.5.0
 		*/
 		public function rps_return_toggle() {

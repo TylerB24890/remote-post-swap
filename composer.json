@@ -1,7 +1,7 @@
 {
 	"name": "Remote Post Swap",
-	"description": "Provides an easy way to switch between a remote database and a local database for development purposes",
-	"keywords": ["Development", "remote", "rest api", "api", "rest", "database", "mysql", "db"],
+	"description": "PSwap local development post data out with live/remote post data on the fly",
+	"keywords": ["remote", "database", "posts", "swap", "post swap", "remote database", "wp-api", "rest api", "api"],
 	"license": "GPL-2.0+",
 	"authors": [
 		{

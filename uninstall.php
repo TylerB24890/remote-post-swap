@@ -11,6 +11,5 @@
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
 	exit;
 } else {
-	delete_post_meta_by_key( 'post_size_bytes' );
-	delete_post_meta_by_key( 'post_size_formatted' );
+	delete_post_meta_by_key( 'rps_post_id' );
 }

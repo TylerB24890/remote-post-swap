@@ -48,14 +48,6 @@ if(!class_exists('RPS_Retrieve_Data')) :
 		protected $rps_media;
 
 		/**
-		* The API arguments
-		*
-		* @var $rps_media
-		* @since 0.5.0
-		*/
-		protected $rps_remote_args;
-
-		/**
 		* Executed on class istantiation.
 		*
 		* @since    0.5.0
@@ -73,10 +65,6 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';
 			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users';
 			$this->rps_media = $this->rps_base_url . 'wp-json/wp/v2/media';
-
-			$this->rps_remote_args = array(
-				'sslverify' => false
-			);
 		}
 
 		/**
@@ -92,7 +80,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$posts = false;
 
 			if($id != NULL && $id != FALSE) {
-				$resp = wp_remote_get($this->rps_posts . '/' . $id, $this->rps_remote_args);
+				$resp = wp_remote_get($this->rps_posts . '/' . $id);
 			} elseif(!empty($filters)) {
 
 				$fc = 0;
@@ -106,11 +94,10 @@ if(!class_exists('RPS_Retrieve_Data')) :
 					$fc++;
 				}
 
-				$resp = wp_remote_get($this->rps_posts . $filter_str, $this->rps_remote_args);
-
+				$resp = wp_remote_get($this->rps_posts . $filter_str);
 
 			} else {
-				$resp = wp_remote_get($this->rps_posts, $this->rps_remote_args);
+				$resp = wp_remote_get($this->rps_posts);
 			}
 
 			if(is_wp_error( $resp )) {
@@ -137,9 +124,9 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$users = false;
 
 			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_users . $id, $this->rps_remote_args);
+				$resp = wp_remote_get($this->rps_users . $id);
 			} else {
-				$resp = wp_remote_get($this->rps_users, $this->rps_remote_args);
+				$resp = wp_remote_get($this->rps_users);
 			}
 
 			if(is_wp_error( $resp )) {
@@ -166,7 +153,7 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			$media = false;
 
 			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_media . '/' . $id, $this->rps_remote_args);
+				$resp = wp_remote_get($this->rps_media . '/' . $id);
 			}
 
 			if(is_wp_error($resp)) {
