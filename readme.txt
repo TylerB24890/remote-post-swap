@@ -4,6 +4,8 @@ Tags: remote, database, posts, swap, post swap, remote database, wp-api, rest ap
 Requires at least: 4.7.0
 Tested up to: 4.7.3
 Stable tag: 0.5.0
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Swap local development post data out with live/remote post data on the fly
 
