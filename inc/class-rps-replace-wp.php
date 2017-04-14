@@ -38,7 +38,7 @@ if(!class_exists('RPS_Replace_WP')) :
 		*/
 		public function rps_swap_post_data($posts, $query = false) {
 
-			if(is_admin() || !is_main_query())
+			if(is_admin())
 			return $posts;
 
 			if(is_single() && $this->rps_get_post_meta($posts[0]->ID)) {
