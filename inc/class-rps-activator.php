@@ -5,7 +5,7 @@
 * This class defines all code necessary to run during the plugin's activation.
 *
 * @author 	Tyler Bailey
-* @version 0.5.0
+* @version 0.6.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */

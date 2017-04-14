@@ -16,7 +16,7 @@
 * Plugin Name:        Remote Post Swap
 * Plugin URI:        	http://tylerb.me/plugins/remote-post-swap.zip
 * Description:       	Swap local development post data out with live/remote post data on the fly
-* Version:           	 0.5.0
+* Version:           	 0.6.0
 * Author:            	 Tyler Bailey
 * Author URI:          http://tylerb.me
 * License:           	 GPL-2.0+

@@ -4,7 +4,7 @@
 * Remote Post Swap replace standard WP functions with API data
 *
 * @author 	Tyler Bailey
-* @version 0.5.0
+* @version 0.6.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
@@ -84,45 +84,89 @@ if(!class_exists('RPS_Replace_WP')) :
 		private function rps_swap_loop_posts($posts) {
 			// Get the total post count queried
 			$post_count = count($posts);
-			$npc = 0;
+			// Array of already saved post IDs from the API
+			$rps_retrieve = array();
 
 			foreach($posts as $post) {
-				$npc++;
 				$rps_id = $this->rps_get_post_meta($post->ID);
 
 				if($rps_id) {
+					$rps_retrieve[] = $rps_id;
+				}
+			}
 
-					$post = $this->rps_swap_single_post($post, $rps_id);
+			// Number of items in the rps_retrieve array
+			$rps_count = count($rps_retrieve);
 
+			// Number of posts we need to query from the API
+			// Total number of posts from wp_query - number of posts in rps array
+			$num_posts = ($post_count - $rps_count);
+
+			// Default argument for API request
+			$rps_args = array(
+				'per_page' => $post_count
+			);
+
+			if($num_posts > 0) {
+				if($rps_count > 0) {
+					$rps_args = array(
+						'per_page' => $num_posts,
+						'exclude' => $rps_retrieve
+					);
+
+					$rps_saved = $this->rps_get_posts(null, array('include' => $rps_retrieve));
 				} else {
+					$rps_args = array(
+						'per_page' => $num_posts,
+					);
+				}
+			} else {
+				$rps_args = array(
+					'include' => $rps_retrieve
+				);
+			}
 
-					$rpsp = $this->rps_get_posts(null, array('per_page' => $post_count));
+			// Get the posts from the API
+			$rpsp = $this->rps_get_posts(null, $rps_args);
 
-					if($rpsp) {
-						// Set the array for the API posts
-						$rps_posts = array();
+			// If we got new posts + retrieved saved posts, merge the array
+			if(isset($rps_saved) && !empty($rps_saved))
+				$rpsp = array_merge($rps_saved, $rpsp);
 
-						// Set the new post count variable for the array
-						// Loop through returned API posts and assign new array data
-						foreach($rpsp as $rps_post) {
-							if($this->rps_ensure_unqiue_meta($rps_post->id)) {
-								$rps_posts[$npc]['post_id'] = $rps_post->id;
-								$rps_posts[$npc]['post_content'] = $this->rps_adjust_media_urls($rps_post->content->rendered);
-								$rps_posts[$npc]['post_title'] = $rps_post->title->rendered;
-								$rps_posts[$npc]['post_date'] = $rps_post->date;
-								$rps_posts[$npc]['post_excerpt'] = $rps_post->excerpt->rendered;
-							}
-						}
+			// If we have any new posts at all
+			if($rpsp && !empty($rpsp)) {
+				// Set the array for the API posts
+				$rps_posts = array();
 
-						// Reset the new post count variable for the second array
-						// Loop through original post object and replace data with returned API data
-						$post->post_title = $rps_posts[$npc]['post_title'];
-						$post->post_content = $rps_posts[$npc]['post_content'];
-						$post->post_date = $rps_posts[$npc]['post_date'];
-						$post->post_excerpt = $rps_posts[$npc]['post_excerpt'];
+				// Set the "New Post Counter" variable
+				$npc = 0;
 
-						update_post_meta($post->ID, $this->rps_meta, $rps_posts[$npc]['post_id']);
-					}
+				// Loop through returned API posts and assign new array data
+				foreach($rpsp as $rps_post) {
+
+					$rps_posts[$npc]['post_id'] = $rps_post->id;
+					$rps_posts[$npc]['post_content'] = $this->rps_adjust_media_urls($rps_post->content->rendered);
+					$rps_posts[$npc]['post_title'] = $rps_post->title->rendered;
+					$rps_posts[$npc]['post_date'] = $rps_post->date;
+					$rps_posts[$npc]['post_excerpt'] = $rps_post->excerpt->rendered;
+
+					$npc++;
+				}
+
+				// Set the "Original Post Counter" variable
+				$opc = 0;
+				foreach($posts as $post) {
+
+					// Loop through original post object and replace data with returned API data
+					$post->post_title = $rps_posts[$opc]['post_title'];
+					$post->post_content = $rps_posts[$opc]['post_content'];
+					$post->post_date = $rps_posts[$opc]['post_date'];
+					$post->post_excerpt = $rps_posts[$opc]['post_excerpt'];
+
+					if($this->rps_ensure_unqiue_meta($rps_posts[$opc]['post_id']))
+					update_post_meta($post->ID, $this->rps_meta, $rps_posts[$opc]['post_id']);
+
+					$opc++;
 				}
 			}
 
@@ -171,16 +215,29 @@ if(!class_exists('RPS_Replace_WP')) :
 		* @since    0.5.0
 		*/
 		private function rps_ensure_unqiue_meta($rps_id) {
+
+			$rps_id = (int) $rps_id;
+
 			$args = array(
-				'posts_per_page' => -1,
-				'meta_key' => $this->rps_meta,
-				'meta_value' => $rps_id
+				'posts_per_page' => 1,
+				'meta_query' => array(
+					array(
+						'key' => $this->rps_meta,
+						'value' => $rps_id
+					)
+				),
+				'fields' => 'ids'
 			);
+
 			$rpsq = new WP_Query( $args );
 
-			if($rpsq->have_posts()) {
+			$rpsq_arr = $rpsq->posts;
+
+			if(!empty($rpsq_arr)) {
 				return false;
 			}
+
+			wp_reset_query();
 
 			return true;
 		}

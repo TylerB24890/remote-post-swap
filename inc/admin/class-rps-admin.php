@@ -4,7 +4,7 @@
 * Remote Post Swap Administration
 *
 * @author 	Tyler Bailey
-* @version 0.5.0
+* @version 0.6.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc/admin
 */
