@@ -27,6 +27,14 @@ if(!class_exists('RPS\RPS')) :
 			$this->rps_init();
 		}
 
+		/**
+		* Initialize the RPS_Replace_WP object to get the plugin running.
+		*
+		* If user is admin, initialize the RPS_Admin object
+		*
+		* @return	null
+		* @since	0.7.0
+		*/
 		private function rps_init() {
 			new RPS_Replace_WP;
 

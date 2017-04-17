@@ -27,9 +27,10 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 		public function __construct() {
 			parent::__construct();
 
-			if($this->rps_check_connection())
-			add_filter( 'the_posts', array($this, 'rps_swap_post_data'), 10, 3 );
-			add_filter('post_thumbnail_html', array($this, 'rps_swap_post_thumbnail'), 99, 5);
+			if($this->rps_check_connection()) {
+				add_filter( 'the_posts', array($this, 'rps_swap_post_data'), 10, 3 );
+				add_filter('post_thumbnail_html', array($this, 'rps_swap_post_thumbnail'), 99, 5);
+			}
 		}
 
 		/**
