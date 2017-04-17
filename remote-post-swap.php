@@ -42,7 +42,7 @@ define('RPS_REQUIRED_WP_VERSION',  '4.7');
 /**
 * The autoloader class to autoload PHP classes using Namespaces.
 */
-require_once RPS_GLOBAL_DIR .  'autoload.php';
+require_once RPS_GLOBAL_DIR .  'inc/class-rps-autoloader.php';
 
 /**
 * The code that runs during plugin activation.
@@ -71,7 +71,7 @@ register_deactivation_hook( __FILE__, 'RPS\deactivate_rps' );
 if( ! function_exists('RPS\rps_init') ) {
 	function rps_init() {
 			// Load the autoloader class
-			$loader = new RPS_Psr4AutoloaderClass();
+			$loader = new RPS_Autoloader();
 
 			// Register the autoloader
 			$loader->rps_register();
