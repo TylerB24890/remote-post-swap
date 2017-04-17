@@ -36,6 +36,9 @@ Post meta is used to store post IDs returned from the API call and matched up wi
 
 == Changelog ==
 
+= 0.8.0 =
+* Major performance enhancements & code optimization
+
 = 0.7.0 =
 * Add in the ability to allow plugin users to choose which post data is swapped with remote post data (options page)
 * Rewrite the admin classes to allow for separation of logic/display

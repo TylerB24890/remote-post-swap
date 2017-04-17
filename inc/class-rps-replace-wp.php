@@ -86,22 +86,17 @@ if(!class_exists('RPS_Replace_WP')) :
 
 			if($num_posts > 0) {
 				// If num_posts is greater than one, reset the default API request args
-				$rps_args = array(
-					'per_page' => $num_posts,
-				);
+				$rps_args['per_page'] = $num_posts;
 
 				if($rps_count > 0) {
-					$rps_args = array(
-						'exclude' => $rps_retrieve
-					);
+
+					$rps_args['exclude'] = $rps_retrieve;
 
 					// Get saved posts from API
 					$rps_saved = $this->rps_get_api_data(null, 'posts', array('include' => $rps_retrieve));
 				}
 			} else {
-				$rps_args = array(
-					'include' => $rps_retrieve
-				);
+				$rps_args['include'] = $rps_retrieve;
 			}
 
 			// Get the posts from the API
