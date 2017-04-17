@@ -28,15 +28,17 @@ Post meta is used to store post IDs returned from the API call and matched up wi
 2. Click on the 'Remote Post Swap' link.
 3. Check the toggle box shown.
 4. Enter the URL to the live site you wish to pull posts from. This should be a valid URL.
+5. Turn on which post data you wish to replace (Post Title, Post Excerpt, Post Content, Post Date, Featured Images)
 
 == To Do ==
 1. Pull in author data.
 2. Pull in post comments.
-3. Allow users to choose which data to swap via toggle options on settings page.
 
 == Changelog ==
 
 = 0.7.0 =
+* Add in the ability to allow plugin users to choose which post data is swapped with remote post data (options page)
+* Rewrite the admin classes to allow for separation of logic/display
 * Add psr4 autoloader to autoload PHP classes without using require/include
 
 = 0.6.0 =
