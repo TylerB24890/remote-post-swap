@@ -4,16 +4,18 @@
 * Remote Post Swap Administration
 *
 * @author 	Tyler Bailey
-* @version 0.6.0
+* @version 0.7.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc/admin
 */
 
+namespace RPS\Admin;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS_Admin')) :
+if(!class_exists('RPS\Admin\RPS_Admin')) :
 
-	class RPS_Admin extends RPS_Base {
+	class RPS_Admin extends \RPS\RPS_Base {
 
 		/**
 		* Executed on class istantiation.
@@ -191,7 +193,5 @@ if(!class_exists('RPS_Admin')) :
 			delete_post_meta_by_key( $this->rps_meta );
 		}
 	}
-
-	new RPS_Admin();
 
 endif;

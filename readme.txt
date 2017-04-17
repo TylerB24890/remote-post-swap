@@ -3,7 +3,7 @@ Contributors: TyB
 Tags: remote, database, posts, swap, post swap, remote database, wp-api, rest api, api
 Requires at least: 4.7.0
 Tested up to: 4.7.3
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Post meta is used to store post IDs returned from the API call and matched up wi
 3. Allow users to choose which data to swap via toggle options on settings page.
 
 == Changelog ==
+
+= 0.7.0 =
+* Add psr4 autoloader to autoload PHP classes without using require/include
 
 = 0.6.0 =
 * Re-wrote the replace-wp class to only make a maximum of 2 API calls per loop. (Performance enhancement)

@@ -4,14 +4,16 @@
 * Remote Post Swap Plugin Bootstrap File
 *
 * @author 	Tyler Bailey
-* @version 0.6.0
+* @version 0.7.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
 
+namespace RPS;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS')) :
+if(!class_exists('RPS\RPS')) :
 
 	class RPS {
 
@@ -22,25 +24,14 @@ if(!class_exists('RPS')) :
 		*/
 		public function __construct() {
 			$this->set_locale();
-			$this->load_dependencies();
+			$this->rps_init();
 		}
 
-
-		/**
-		* Loads all required plugin files and istantiates classes
-		*
-		* @return	null
-		* @since   0.5.0
-		*/
-		private function load_dependencies() {
-
-			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-base.php');
-			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-retrieve-data.php');
-			require_once(RPS_GLOBAL_DIR . 'inc/class-rps-replace-wp.php');
+		private function rps_init() {
+			new RPS_Replace_WP;
 
 			if(is_admin())
-			require_once(RPS_GLOBAL_DIR . 'inc/admin/class-rps-admin.php');
-
+				new \RPS\Admin\RPS_Admin;
 		}
 
 		/**

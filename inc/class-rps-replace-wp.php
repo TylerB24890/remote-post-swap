@@ -4,14 +4,17 @@
 * Remote Post Swap replace standard WP functions with API data
 *
 * @author 	Tyler Bailey
-* @version 0.6.0
+* @version 0.7.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
 
+namespace RPS;
+use \WP_Query;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS_Replace_WP')) :
+if(!class_exists('RPS\RPS_Replace_WP')) :
 
 	class RPS_Replace_WP extends RPS_Retrieve_Data {
 

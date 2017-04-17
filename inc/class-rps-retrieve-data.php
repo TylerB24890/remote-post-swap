@@ -4,14 +4,16 @@
 * Remote Post Swap retrieve data from API endpoints
 *
 * @author 	Tyler Bailey
-* @version 0.6.0
+* @version 0.7.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
 
+namespace RPS;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS_Retrieve_Data')) :
+if(!class_exists('RPS\RPS_Retrieve_Data')) :
 
 	class RPS_Retrieve_Data extends RPS_Base {
 

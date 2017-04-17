@@ -5,14 +5,16 @@
 * This class defines all code necessary to run during the plugin's activation.
 *
 * @author 	Tyler Bailey
-* @version 0.6.0
+* @version 0.7.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
 
+namespace RPS;
+
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS_Activator')) :
+if(!class_exists('RPS\RPS_Activator')) :
 
 	class RPS_Activator {
 
@@ -23,7 +25,7 @@ if(!class_exists('RPS_Activator')) :
 		*
 		* @since    0.5.0
 		*/
-		public static function activate() {
+		public static function rps_activate() {
 			self::rps_system_requirements_met();
 		}
 
@@ -42,8 +44,6 @@ if(!class_exists('RPS_Activator')) :
 			if ( version_compare( $wp_version, RPS_REQUIRED_WP_VERSION, '<' ) ) {
 				wp_die(__("You must be running at least WordPress 4.7 for this plugin to function properly.", RPS_SLUG), __('Incompatible WordPress Version.', RPS_SLUG));
 			}
-
-			return true;
 		}
 	}
 

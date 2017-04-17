@@ -16,7 +16,7 @@
 * Plugin Name:        Remote Post Swap
 * Plugin URI:        	http://tylerb.me/plugins/remote-post-swap.zip
 * Description:       	Swap local development post data out with live/remote post data on the fly
-* Version:           	 0.6.0
+* Version:           	 0.7.0
 * Author:            	 Tyler Bailey
 * Author URI:          http://tylerb.me
 * License:           	 GPL-2.0+
@@ -24,7 +24,7 @@
 * Text Domain:       rps
 */
 
-
+namespace RPS;
 
 // If this file is called directly, abort.
 if ( ! defined( 'WPINC' ) ) {
@@ -40,39 +40,49 @@ define('RPS_REQUIRED_PHP_VERSION', '5.3');
 define('RPS_REQUIRED_WP_VERSION',  '4.7');
 
 /**
+* The autoloader class to autoload PHP classes using Namespaces.
+*/
+require_once RPS_GLOBAL_DIR .  'autoload.php';
+
+/**
 * The code that runs during plugin activation.
-* This action is documented in includes/class-rps-activator.php
+* This action is documented in inc/class-rps-activator.php
 */
 function activate_rps() {
-	require_once RPS_GLOBAL_DIR . 'inc/class-rps-activator.php';
-	RPS_Activator::activate();
+	require_once(RPS_GLOBAL_DIR . 'inc/class-rps-activator.php');
+	RPS_Activator::rps_activate();
 }
 /**
 * The code that runs during plugin deactivation.
-* This action is documented in includes/class-rps-deactivator.php
+* This action is documented in inc/class-rps-deactivator.php
 */
 function deactivate_rps() {
-	require_once RPS_GLOBAL_DIR . 'inc/class-rps-deactivator.php';
-	RPS_Deactivator::deactivate();
+	require_once(RPS_GLOBAL_DIR . 'inc/class-rps-deactivator.php');
+	RPS_Deactivator::rps_deactivate();
 }
-register_activation_hook( __FILE__, 'activate_rps' );
-register_deactivation_hook( __FILE__, 'deactivate_rps' );
-
-
-/**
-* The core plugin classes that is used to define internationalization,
-* admin-specific hooks, and public-facing site hooks.
-*/
-require RPS_GLOBAL_DIR .  'inc/class-rps.php';
+register_activation_hook( __FILE__, 'RPS\activate_rps' );
+register_deactivation_hook( __FILE__, 'RPS\deactivate_rps' );
 
 /**
 * Begins execution of the plugin.
 *
 * @since    0.5.0
 */
-if(!function_exists('rps_init')) {
+if( ! function_exists('RPS\rps_init') ) {
 	function rps_init() {
-		new RPS();
+			// Load the autoloader class
+			$loader = new RPS_Psr4AutoloaderClass();
+
+			// Register the autoloader
+			$loader->rps_register();
+
+			// Add the plugin namespaces
+			$loader->rps_add_namespace('RPS', RPS_GLOBAL_DIR . 'inc');
+			$loader->rps_add_namespace('RPS\Admin', RPS_GLOBAL_DIR . 'inc/admin');
+
+			// Istantiate the plugin
+			new RPS;
 	}
+
+	add_action('init', 'RPS\rps_init');
 }
-add_action('init', 'rps_init');
