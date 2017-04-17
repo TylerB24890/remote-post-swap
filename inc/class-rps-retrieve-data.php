@@ -94,7 +94,5 @@ if(!class_exists('RPS_Retrieve_Data')) :
 			return $filter_str;
 		}
 	}
-
-	new RPS_Retrieve_Data();
-
+	
 endif;

@@ -223,6 +223,4 @@ if(!class_exists('RPS_Replace_WP')) :
 		}
 	}
 
-	new RPS_Replace_WP();
-
 endif;

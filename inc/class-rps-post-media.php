@@ -98,6 +98,4 @@ if(!class_exists('RPS_Post_Media')) :
 		}
 	}
 
-	new RPS_Post_Media();
-
 endif;
