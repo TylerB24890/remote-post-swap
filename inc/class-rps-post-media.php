@@ -55,12 +55,18 @@ if(!class_exists('RPS\RPS_Post_Media')) :
 				$rpsp_img_id = $rpsp->featured_media;
 				$rpsp_img = $rpsp_obj->rps_get_media($rpsp_img_id);
 
-				if(isset($rpsp_img->media_details))
-				$rpsp_img_url = $rpsp_img->media_details->sizes->$size->source_url;
+				if(isset($rpsp_img->media_details)) {
+					if(isset($rpsp_img->media_details->sizes->$size)) {
+						$rpsp_img_url = $rpsp_img->media_details->sizes->$size->source_url;
+					} else {
+						$size = 'full';
+						$rpsp_img_url = $rpsp_img->media_details->sizes->$size->source_url;
+					}
+				}
 			}
 
 			if($rpsp_img_url)
-		    $html = '<img src="' . $rpsp_img_url . '" />';
+		    $html = '<img src="' . $rpsp_img_url . '" style="max-width: 100%; height: auto;"/>';
 
 		    return $html;
 		}
