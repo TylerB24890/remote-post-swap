@@ -40,6 +40,7 @@ Post meta is used to store post IDs returned from the API call and matched up wi
 * Add in the ability to allow plugin users to choose which post data is swapped with remote post data (options page)
 * Rewrite the admin classes to allow for separation of logic/display
 * Add psr4 autoloader to autoload PHP classes without using require/include
+* Separate the featured image functions from the replace-wp functions for better organization
 
 = 0.6.0 =
 * Re-wrote the replace-wp class to only make a maximum of 2 API calls per loop. (Performance enhancement)
