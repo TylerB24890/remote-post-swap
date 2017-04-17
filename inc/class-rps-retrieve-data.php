@@ -26,38 +26,6 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		protected $rps_base_url;
 
 		/**
-		* The API endpoint for posts
-		*
-		* @var $rps_posts
-		* @since 0.5.0
-		*/
-		protected $rps_posts;
-
-		/**
-		* The API endpoint for users
-		*
-		* @var $rps_users
-		* @since 0.5.0
-		*/
-		protected $rps_users;
-
-		/**
-		* The API endpoint for media
-		*
-		* @var $rps_media
-		* @since 0.5.0
-		*/
-		protected $rps_media;
-
-		/**
-		* The API endpoint for categories
-		*
-		* @var $rps_cat
-		* @since 0.8.0
-		*/
-		protected $rps_cat;
-
-		/**
 		* Executed on class istantiation.
 		*
 		* @since    0.5.0
@@ -68,12 +36,6 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 
 			// Base URL from user entered options
 			$this->rps_base_url = RPS_Base::rps_return_option('url') . 'wp-json/wp/v2/';
-
-			// Endpoint URLs
-			$this->rps_posts = $this->rps_base_url . 'posts';
-			$this->rps_users = $this->rps_base_url . 'users';
-			$this->rps_media = $this->rps_base_url . 'media';
-			$this->rps_cat = $this->rps_base_url . 'categories';
 		}
 
 		/**
@@ -92,20 +54,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 			$id = (strlen($id) > 0 ? '/' . $id : $id);
 			$filter_str = $this->rps_process_filters($filters);
 
-			switch($type) {
-				case 'posts' :
-					$url = $this->rps_posts;
-				break;
-				case 'media' :
-					$url = $this->rps_media;
-				break;
-				case 'category' :
-					$url = $this->rps_cat;
-				break;
-				case 'user' :
-					$url = $this->rps_users;
-				break;
-			}
+			$url = $this->rps_base_url . $type;
 
 			$resp = wp_remote_get($url . $id . $filter_str);
 
