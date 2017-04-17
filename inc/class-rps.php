@@ -23,8 +23,8 @@ if(!class_exists('RPS')) :
 		* @since    0.5.0
 		*/
 		public function __construct() {
-			$this->set_locale();
-			$this->rps_init();
+			self::set_locale();
+			self::rps_init();
 		}
 
 		/**
@@ -35,7 +35,7 @@ if(!class_exists('RPS')) :
 		* @return	null
 		* @since	0.7.0
 		*/
-		private function rps_init() {
+		private static function rps_init() {
 			new RPS_Replace_WP;
 
 			if(is_admin())
@@ -48,7 +48,7 @@ if(!class_exists('RPS')) :
 		* @return	null
 		* @since   0.5.0
 		*/
-		private function set_locale() {
+		private static function set_locale() {
 			load_plugin_textdomain( RPS_SLUG, false, RPS_GLOBAL_DIR . 'language' );
 		}
 
