@@ -10,12 +10,13 @@
 */
 
 namespace RPS;
+use RPS\RPS_Base;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 if(!class_exists('RPS\RPS_Retrieve_Data')) :
 
-	class RPS_Retrieve_Data extends RPS_Base {
+	class RPS_Retrieve_Data {
 
 		/**
 		* The URL to grab data from -- entered from plugin options page
@@ -55,13 +56,11 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		* @since    0.5.0
 		*/
 		public function __construct() {
-			parent::__construct();
-
-			if(!$this->rps_check_connection())
+			if( ! RPS_Base::rps_check_connection() )
 			return false;
 
 			// Base URL from user entered options
-			$this->rps_base_url = $this->rps_return_url();
+			$this->rps_base_url = RPS_Base::rps_return_url();
 
 			// Endpoint URLs
 			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';

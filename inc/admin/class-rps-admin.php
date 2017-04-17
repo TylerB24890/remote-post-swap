@@ -10,12 +10,13 @@
 */
 
 namespace RPS\Admin;
+use \RPS\RPS_Base;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
 if(!class_exists('RPS\Admin\RPS_Admin')) :
 
-	class RPS_Admin extends \RPS\RPS_Base {
+	class RPS_Admin {
 
 		/**
 		* Executed on class istantiation.
@@ -29,8 +30,6 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 
 			if(!is_admin())
 			exit(__("You must be an administrator.", RPS_SLUG));
-
-			parent::__construct();
 
 			add_action( 'admin_menu', array( $this, 'rps_admin_menu_init' ) );
 			add_action( 'admin_init', array( $this, 'rps_settings_init' ) );
@@ -109,7 +108,7 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 			}
 
 			if(isset($input['rps_url'])) {
-				if($this->rps_return_url() != $input['rps_url'])
+				if(RPS_Base::rps_return_url() != $input['rps_url'])
 				$this->rps_flush_meta();
 
 				$new_input['rps_url'] = esc_url_raw($input['rps_url']);
@@ -136,7 +135,7 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		* @since    0.5.0
 		*/
 		public function rps_toggle_input() {
-			echo '<label><input type="checkbox" id="rps_toggle" name="rps-db-url[rps_toggle]" value="1" ' . ($this->rps_return_toggle() ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
+			echo '<label><input type="checkbox" id="rps_toggle" name="rps-db-url[rps_toggle]" value="1" ' . (RPS_Base::rps_return_toggle() ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
 		}
 
 		/**
@@ -148,7 +147,7 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		public function rps_url_input() {
 			printf(
 				'<input type="text" id="rps_url" name="rps-db-url[rps_url]" value="%s" style="width: 300px; height: 35px;" placeholder="http://yourwebsite.com"/>',
-				( $this->rps_return_url() ? esc_url( $this->rps_return_url() ) : '' )
+				( RPS_Base::rps_return_url() ? esc_url( RPS_Base::rps_return_url() ) : '' )
 			);
 		}
 
@@ -169,10 +168,10 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		* @since    0.5.0
 		*/
 		private function rps_render_connection_notice() {
-			if($this->rps_check_connection()) {
+			if(RPS_Base::rps_check_connection()) {
 				$class = "notice-success";
 				$msg = __('Remote Database Connection is active', RPS_SLUG);
-			} elseif($this->rps_return_toggle() && !$this->rps_return_url()) {
+			} elseif(RPS_Base::rps_return_toggle() && ! RPS_Base::rps_return_url()) {
 				$class = 'notice-error';
 				$msg = __('Your database connection is turned on but you have not provided a valid URL to connect to.', RPS_SLUG);
 			} else {
@@ -190,7 +189,7 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		* @since    0.5.0
 		*/
 		public function rps_flush_meta() {
-			delete_post_meta_by_key( $this->rps_meta );
+			delete_post_meta_by_key( RPS_Base::$rps_meta );
 		}
 	}
 

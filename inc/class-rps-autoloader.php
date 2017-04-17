@@ -10,12 +10,13 @@
 * @author 	Tyler Bailey
 * @version 0.7.0
 * @package remote-post-swap
+* @subpackage remote-post-swap/inc
 */
 
 namespace RPS;
 
 if(!class_exists('RPS\RPS_Autoloader')) :
-    
+
     class RPS_Autoloader {
         /**
          * An associative array where the key is a namespace prefix and the value

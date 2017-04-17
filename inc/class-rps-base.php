@@ -23,7 +23,7 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @var $rps_meta
 		* @since 0.5.0
 		*/
-		public $rps_meta;
+		public static $rps_meta;
 
 		/**
 		* Holds the user entered options
@@ -31,7 +31,7 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @var $options
 		* @since 0.5.0
 		*/
-		private $options;
+		private static $options;
 
 		/**
 		* Executed on class istantiation.
@@ -39,9 +39,9 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @since    0.5.0
 		*/
 		public function __construct() {
-			$this->options = get_option('rps-db-url');
+			self::$options = get_option('rps-db-url');
 
-			$this->rps_meta = 'rps_post_id';
+			self::$rps_meta = 'rps_post_id';
 		}
 
 		/**
@@ -50,8 +50,8 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @return  	bool
 		* @since    0.5.0
 		*/
-		public function rps_check_connection() {
-			if($this->rps_return_toggle() && $this->rps_return_url()) {
+		public static function rps_check_connection() {
+			if(self::rps_return_toggle() && self::rps_return_url()) {
 				return true;
 			}
 
@@ -64,8 +64,8 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @return	bool
 		* @since    0.5.0
 		*/
-		public function rps_return_toggle() {
-			if(isset($this->options['rps_toggle']) && $this->options['rps_toggle'] === true)
+		public static function rps_return_toggle() {
+			if(isset(self::$options['rps_toggle']) && self::$options['rps_toggle'] === true)
 			return true;
 
 			return false;
@@ -77,9 +77,9 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @return	string || bool
 		* @since    0.5.0
 		*/
-		public function rps_return_url() {
-			if(isset($this->options['rps_url']) && strlen($this->options['rps_url']) > 1)
-			return $this->rps_fix_url($this->options['rps_url']);
+		public static function rps_return_url() {
+			if(isset(self::$options['rps_url']) && strlen(self::$options['rps_url']) > 1)
+			return self::rps_fix_url(self::$options['rps_url']);
 
 			return false;
 		}
@@ -90,7 +90,7 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @param  string - $url - URL to modify
 		* @return  string - modified URL
 		*/
-		private function rps_fix_url($url) {
+		private static function rps_fix_url($url) {
 			$furl = str_replace('\\', '/', trim($url));
 			return ( substr($furl, -1) != '/' ) ? $furl .= '/' : $furl;
 		}
@@ -101,8 +101,8 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @param  int - $pid - Post ID to retrieve meta for
 		* @return  int || bool
 		*/
-		public function rps_get_post_meta($pid) {
-			return get_post_meta($pid, $this->rps_meta, true);
+		public static function rps_get_post_meta($pid) {
+			return get_post_meta($pid, self::$rps_meta, true);
 		}
 	}
 

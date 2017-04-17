@@ -27,7 +27,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 		public function __construct() {
 			parent::__construct();
 
-			if($this->rps_check_connection()) {
+			if(RPS_Base::rps_check_connection()) {
 				add_filter( 'the_posts', array($this, 'rps_swap_post_data'), 10, 3 );
 				add_filter('post_thumbnail_html', array($this, 'rps_swap_post_thumbnail'), 99, 5);
 			}
@@ -45,7 +45,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			if(is_admin())
 			return $posts;
 
-			if(is_single() && $this->rps_get_post_meta($posts[0]->ID)) {
+			if(is_single() && RPS_Base::rps_get_post_meta($posts[0]->ID)) {
 				$posts = $this->rps_swap_single_post($posts[0]);
 			} else {
 				$posts = $this->rps_swap_loop_posts($posts);
@@ -65,7 +65,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 		private function rps_swap_single_post($post, $rps_id = NULL) {
 
 			if($rps_id === NULL)
-			$rps_id = $this->rps_get_post_meta($post->ID);
+			$rps_id = RPS_Base::rps_get_post_meta($post->ID);
 
 			$rpsp = $this->rps_get_posts($rps_id);
 
@@ -92,7 +92,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			$rps_retrieve = array();
 
 			foreach($posts as $post) {
-				$rps_id = $this->rps_get_post_meta($post->ID);
+				$rps_id = RPS_Base::rps_get_post_meta($post->ID);
 
 				if($rps_id) {
 					$rps_retrieve[] = $rps_id;
@@ -190,7 +190,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 		*/
 		public function rps_swap_post_thumbnail($html, $post_id, $post_thumbnail_id, $size, $attr) {
 
-			$rps_pid = $this->rps_get_post_meta($post_id);
+			$rps_pid = RPS_Base::rps_get_post_meta($post_id);
 			$rpsp_img_url = false;
 
 			if($size == 'post-thumbnail')
@@ -226,7 +226,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 				'posts_per_page' => 1,
 				'meta_query' => array(
 					array(
-						'key' => $this->rps_meta,
+						'key' => RPS_Base::$rps_meta,
 						'value' => $rps_id
 					)
 				),
@@ -262,7 +262,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 
 				// If src attribute does NOT have 'http', add the entered site URL
 				if(strpos($url, 'http') === false)
-				$url = $this->rps_return_url() . $url;
+				$url = RPS_Base::rps_return_url() . $url;
 
 				return $x[1] . $url;
 			}, $content);
