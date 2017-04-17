@@ -3,7 +3,7 @@ Contributors: TyB
 Tags: remote, database, posts, swap, post swap, remote database, wp-api, rest api, api
 Requires at least: 4.7.0
 Tested up to: 4.7.3
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

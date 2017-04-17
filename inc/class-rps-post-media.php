@@ -7,7 +7,7 @@
 * Provides a function for ensuring the proper URLs for embedded images
 *
 * @author 	Tyler Bailey
-* @version 0.7.0
+* @version 0.8.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */

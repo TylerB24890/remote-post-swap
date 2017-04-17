@@ -4,7 +4,7 @@
 * Remote Post Swap retrieve data from API endpoints
 *
 * @author 	Tyler Bailey
-* @version 0.7.0
+* @version 0.8.0
 * @package remote-post-swap
 * @subpackage remote-post-swap/inc
 */
@@ -50,6 +50,14 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		protected $rps_media;
 
 		/**
+		* The API endpoint for categories
+		*
+		* @var $rps_cat
+		* @since 0.7.0
+		*/
+		protected $rps_cat;
+
+		/**
 		* Executed on class istantiation.
 		*
 		* @since    0.5.0
@@ -59,12 +67,13 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 			return false;
 
 			// Base URL from user entered options
-			$this->rps_base_url = RPS_Base::rps_return_option('url');
+			$this->rps_base_url = RPS_Base::rps_return_option('url') . 'wp-json/wp/v2/';
 
 			// Endpoint URLs
-			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';
-			$this->rps_users = $this->rps_base_url . 'wp-json/wp/v2/users';
-			$this->rps_media = $this->rps_base_url . 'wp-json/wp/v2/media';
+			$this->rps_posts = $this->rps_base_url . 'posts';
+			$this->rps_users = $this->rps_base_url . 'users';
+			$this->rps_media = $this->rps_base_url . 'media';
+			$this->rps_cat = $this->rps_base_url . 'categories';
 		}
 
 		/**
@@ -166,6 +175,33 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 			return false;
 
 			return $media;
+		}
+
+		/**
+		* Retrieves categories from API parent site based on ID
+		*
+		* @param   $id - int - the ID of the media element to grab
+		* @return	$cat - array - array of category data returned from API
+		* @since    0.8.0
+		*/
+		public function rps_get_category($id) {
+
+			$cat = false;
+
+			if($id !== NULL) {
+				$resp = wp_remote_get($this->rps_cat . '/' . $id);
+			}
+
+			if(is_wp_error($resp)) {
+				return false;
+			}
+
+			$cat = json_decode( wp_remote_retrieve_body( $resp ) );
+
+			if(empty($cat))
+			return false;
+
+			return $cat;
 		}
 	}
 
