@@ -15,7 +15,7 @@
 
 namespace RPS;
 
-if(!class_exists('RPS\RPS_Autoloader')) :
+if(!class_exists('RPS_Autoloader')) :
 
     class RPS_Autoloader {
         /**

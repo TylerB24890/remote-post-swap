@@ -16,7 +16,7 @@ namespace RPS;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS\RPS_Post_Media')) :
+if(!class_exists('RPS_Post_Media')) :
 
 	class RPS_Post_Media {
 

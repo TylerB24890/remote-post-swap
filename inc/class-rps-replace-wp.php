@@ -14,7 +14,7 @@ use \WP_Query;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS\RPS_Replace_WP')) :
+if(!class_exists('RPS_Replace_WP')) :
 
 	class RPS_Replace_WP extends RPS_Retrieve_Data {
 
@@ -60,6 +60,9 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			$post_count = count($posts);
 			// Array of already saved post IDs from the API
 			$rps_retrieve = array();
+
+			// Default number of RPS posts to retrieve (0)
+			$rps_count = 0;
 
 			foreach($posts as $post) {
 				$rps_id = RPS_Base::rps_get_post_meta($post->ID);

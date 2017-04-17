@@ -16,7 +16,7 @@ use \RPS\RPS_Base;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS\Admin\RPS_Settings')) :
+if(!class_exists('RPS_Settings')) :
 
 	class RPS_Settings {
 

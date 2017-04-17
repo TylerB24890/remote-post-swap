@@ -14,7 +14,7 @@ namespace RPS;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS\RPS_Deactivator')) :
+if(!class_exists('RPS_Deactivator')) :
 
 	class RPS_Deactivator {
 

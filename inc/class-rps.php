@@ -13,7 +13,7 @@ namespace RPS;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
-if(!class_exists('RPS\RPS')) :
+if(!class_exists('RPS')) :
 
 	class RPS {
 
