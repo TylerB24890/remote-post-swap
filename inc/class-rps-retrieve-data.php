@@ -53,7 +53,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		* The API endpoint for categories
 		*
 		* @var $rps_cat
-		* @since 0.7.0
+		* @since 0.8.0
 		*/
 		protected $rps_cat;
 
@@ -77,24 +77,62 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		}
 
 		/**
-		* Retrieves the posts from the target site API
+		* Retrieves the API data from the target site
 		*
-		* @param  $id - int - the ID of the post to retrieve from the API
+		* @param  $id - int - the ID of the data to retrieve from the API
+		* @param  $type - string - type of data to retrieve from the API
 		* @param  $filters - array - Array of API filters
-		* @return	$posts - array - Array of post data returned from API
-		* @since    0.5.0
+		* @return  $api_return - array - Array of post data returned from API
+		* @since    0.8.0
 		*/
-		public function rps_get_posts($id, $filters = array()) {
+		public function rps_get_api_data($id = '', $type = 'posts', $filters = array()) {
 
-			$posts = false;
+			$resp = false;
 
-			if($id != NULL && $id != FALSE) {
-				$resp = wp_remote_get($this->rps_posts . '/' . $id);
-			} elseif(!empty($filters)) {
+			$id = (strlen($id) > 0 ? '/' . $id : $id);
+			$filter_str = $this->rps_process_filters($filters);
 
-				$fc = 0;
-				$filter_str = '';
+			switch($type) {
+				case 'posts' :
+					$url = $this->rps_posts;
+				break;
+				case 'media' :
+					$url = $this->rps_media;
+				break;
+				case 'category' :
+					$url = $this->rps_cat;
+				break;
+				case 'user' :
+					$url = $this->rps_users;
+				break;
+			}
 
+			$resp = wp_remote_get($url . $id . $filter_str);
+
+			if(is_wp_error( $resp )) {
+				return false;
+			}
+
+			$api_return = json_decode( wp_remote_retrieve_body( $resp ));
+
+			if(empty($api_return) || isset($api_return->data->status) && $api_return->data->status === 404)
+			return false;
+
+			return $api_return;
+		}
+
+		/**
+		* Processes the API filter arguments passed as an array to retrieve data
+		*
+		* @param  $filters - array - Array of API filters
+		* @since    0.8.0
+		*/
+		private function rps_process_filters($filters) {
+
+			$fc = 0;
+			$filter_str = '';
+
+			if(is_array($filters)) {
 				foreach($filters as $key => $filter) {
 					if(is_array($filter)) {
 						$filter = implode(",", $filter);
@@ -102,106 +140,9 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 					$filter_str .= ($fc === 0 ? '?' : '&') . $key . '=' . $filter;
 					$fc++;
 				}
-
-				$resp = wp_remote_get($this->rps_posts . $filter_str);
-
-			} else {
-				$resp = wp_remote_get($this->rps_posts);
 			}
 
-			if(is_wp_error( $resp )) {
-				return false;
-			}
-
-			$posts = json_decode( wp_remote_retrieve_body( $resp ));
-
-			if(empty($posts) || isset($posts->data->status) && $posts->data->status === 404)
-			return false;
-
-			return $posts;
-		}
-
-		/**
-		* Retrieves the users from the target site API
-		*
-		* @param  $id - int - the ID of the user to retrieve from the API
-		* @return	$users - array - array of user data returned from API
-		* @since    0.5.0
-		*/
-		public function rps_get_users($id = NULL) {
-
-			$users = false;
-
-			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_users . $id);
-			} else {
-				$resp = wp_remote_get($this->rps_users);
-			}
-
-			if(is_wp_error( $resp )) {
-				return false;
-			}
-
-			$users = json_decode( wp_remote_retrieve_body( $resp ));
-
-			if(empty($users))
-			return false;
-
-			return $users;
-		}
-
-		/**
-		* Retrieves featured image/media information from the API
-		*
-		* @param   $id - int - the ID of the media element to grab
-		* @return	$media - array - array of media data returned from API
-		* @since    0.5.0
-		*/
-		public function rps_get_media($id) {
-
-			$media = false;
-
-			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_media . '/' . $id);
-			}
-
-			if(is_wp_error($resp)) {
-				return false;
-			}
-
-			$media = json_decode( wp_remote_retrieve_body( $resp ) );
-
-			if(empty($media))
-			return false;
-
-			return $media;
-		}
-
-		/**
-		* Retrieves categories from API parent site based on ID
-		*
-		* @param   $id - int - the ID of the media element to grab
-		* @return	$cat - array - array of category data returned from API
-		* @since    0.8.0
-		*/
-		public function rps_get_category($id) {
-
-			$cat = false;
-
-			if($id !== NULL) {
-				$resp = wp_remote_get($this->rps_cat . '/' . $id);
-			}
-
-			if(is_wp_error($resp)) {
-				return false;
-			}
-
-			$cat = json_decode( wp_remote_retrieve_body( $resp ) );
-
-			if(empty($cat))
-			return false;
-
-			return $cat;
+			return $filter_str;
 		}
 	}
 

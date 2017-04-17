@@ -67,7 +67,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			if($rps_id === NULL)
 			$rps_id = RPS_Base::rps_get_post_meta($post->ID);
 
-			$rpsp = $this->rps_get_posts($rps_id);
+			$rpsp = $this->rps_get_api_data($rps_id);
 
 			$post->post_content = RPS_Post_Media::rps_adjust_media_urls($rpsp->content->rendered);
 			$post->post_title = $rpsp->title->rendered;
@@ -118,7 +118,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 						'exclude' => $rps_retrieve
 					);
 
-					$rps_saved = $this->rps_get_posts(null, array('include' => $rps_retrieve));
+					$rps_saved = $this->rps_get_api_data(null, 'posts', array('include' => $rps_retrieve));
 				} else {
 					$rps_args = array(
 						'per_page' => $num_posts,
@@ -131,7 +131,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			}
 
 			// Get the posts from the API
-			$rpsp = $this->rps_get_posts(null, $rps_args);
+			$rpsp = $this->rps_get_api_data(null, 'posts', $rps_args);
 
 			// If we got new posts + retrieved saved posts, merge the array
 			if(isset($rps_saved) && !empty($rps_saved))

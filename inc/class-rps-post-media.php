@@ -51,9 +51,10 @@ if(!class_exists('RPS\RPS_Post_Media')) :
 
 			if($rps_pid) {
 				$rpsp_obj = new RPS_Retrieve_Data;
-				$rpsp = $rpsp_obj->rps_get_posts($rps_pid);
+				$rpsp = $rpsp_obj->rps_get_api_data($rps_pid);
+
 				$rpsp_img_id = $rpsp->featured_media;
-				$rpsp_img = $rpsp_obj->rps_get_media($rpsp_img_id);
+				$rpsp_img = $rpsp_obj->rps_get_api_data($rpsp_img_id, 'media');
 
 				if(isset($rpsp_img->media_details)) {
 					if(isset($rpsp_img->media_details->sizes->$size)) {
