@@ -149,10 +149,10 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 				foreach($rpsp as $rps_post) {
 
 					$rps_posts[$npc]['post_id'] = $rps_post->id;
-					$rps_posts[$npc]['post_content'] = $this->rps_adjust_media_urls($rps_post->content->rendered);
 					$rps_posts[$npc]['post_title'] = $rps_post->title->rendered;
-					$rps_posts[$npc]['post_date'] = $rps_post->date;
 					$rps_posts[$npc]['post_excerpt'] = $rps_post->excerpt->rendered;
+					$rps_posts[$npc]['post_content'] = $this->rps_adjust_media_urls($rps_post->content->rendered);
+					$rps_posts[$npc]['post_date'] = $rps_post->date;
 
 					$npc++;
 				}
@@ -162,9 +162,16 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 				foreach($posts as $post) {
 
 					// Loop through original post object and replace data with returned API data
+					if(RPS_Base::rps_return_option('post_title'))
 					$post->post_title = $rps_posts[$opc]['post_title'];
+
+					if(RPS_Base::rps_return_option('post_content'))
 					$post->post_content = $rps_posts[$opc]['post_content'];
+
+					if(RPS_Base::rps_return_option('post_date'))
 					$post->post_date = $rps_posts[$opc]['post_date'];
+
+					if(RPS_Base::rps_return_option('post_excerpt'))
 					$post->post_excerpt = $rps_posts[$opc]['post_excerpt'];
 
 					if($this->rps_ensure_unqiue_meta($rps_posts[$opc]['post_id']))
@@ -262,7 +269,7 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 
 				// If src attribute does NOT have 'http', add the entered site URL
 				if(strpos($url, 'http') === false)
-				$url = RPS_Base::rps_return_url() . $url;
+				$url = RPS_Base::rps_return_option('rps_url') . $url;
 
 				return $x[1] . $url;
 			}, $content);

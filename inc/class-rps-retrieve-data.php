@@ -60,7 +60,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 			return false;
 
 			// Base URL from user entered options
-			$this->rps_base_url = RPS_Base::rps_return_url();
+			$this->rps_base_url = RPS_Base::rps_return_option('url');
 
 			// Endpoint URLs
 			$this->rps_posts = $this->rps_base_url . 'wp-json/wp/v2/posts';

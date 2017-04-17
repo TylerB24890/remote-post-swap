@@ -3,6 +3,8 @@
 /**
 * Remote Post Swap Administration
 *
+* Adds the menu pages and initializes the settings API
+*
 * @author 	Tyler Bailey
 * @version 0.7.0
 * @package remote-post-swap
@@ -32,7 +34,9 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 			exit(__("You must be an administrator.", RPS_SLUG));
 
 			add_action( 'admin_menu', array( $this, 'rps_admin_menu_init' ) );
-			add_action( 'admin_init', array( $this, 'rps_settings_init' ) );
+
+			// Init the settings
+			new \RPS\Admin\RPS_Settings;
 
 			add_action( 'wp_ajax_rps_delete_meta', array($this, 'rps_flush_meta') );
 			add_action( 'wp_ajax_nopriv_rps_delete_meta', array($this, 'rps_flush_meta' ));
@@ -57,101 +61,6 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		}
 
 		/**
-		* Registers and adds settings to admin page
-		*
-		* @return	null
-		* @since    0.5.0
-		*/
-		public function rps_settings_init() {
-			register_setting(
-				'rps-settings', // Option group
-				'rps-db-url', // Option name
-				array( $this, 'rps_validate_options' ) // Sanitize
-			);
-
-			add_settings_section(
-				'rps-settings-section', // ID
-				'', // Title
-				array( $this, 'rps_field_description' ), // Callback
-				'rps-settings-admin' // Page
-			);
-
-			add_settings_field(
-				'rps_toggle',
-				__('Connect to remote database:', RPS_SLUG),
-				array( $this, 'rps_toggle_input' ),
-				'rps-settings-admin',
-				'rps-settings-section'
-			);
-
-			add_settings_field(
-				'rps_url',
-				__('Website URL:', RPS_SLUG),
-				array( $this, 'rps_url_input' ),
-				'rps-settings-admin',
-				'rps-settings-section'
-			);
-		}
-
-		/**
-		* Validate the options for saving into the database
-		*
-		* @param  	$input - array - array of submitted form data
-		* @return	$new_input - array - validated/formatted form data
-		* @since    0.5.0
-		*/
-		public function rps_validate_options($input) {
-			$new_input = array();
-
-			if(isset($input['rps_toggle'])) {
-				$new_input['rps_toggle'] = ($input['rps_toggle'] == '1' ? true : false);
-			}
-
-			if(isset($input['rps_url'])) {
-				if(RPS_Base::rps_return_url() != $input['rps_url'])
-				$this->rps_flush_meta();
-
-				$new_input['rps_url'] = esc_url_raw($input['rps_url']);
-			}
-
-			return $new_input;
-		}
-
-		/**
-		* Renders help text for the RPS URL field
-		*
-		* @return	string
-		* @since    0.5.0
-		*/
-		public function rps_field_description() {
-			echo "<h3>" . __('Configure your Remote Database Connection below:', RPS_SLUG) . "</h3>";
-			$this->rps_render_connection_notice();
-		}
-
-		/**
-		* Renders the RPS Toggle Checkbox to turn on & off the remote db connection
-		*
-		* @return	string
-		* @since    0.5.0
-		*/
-		public function rps_toggle_input() {
-			echo '<label><input type="checkbox" id="rps_toggle" name="rps-db-url[rps_toggle]" value="1" ' . (RPS_Base::rps_return_toggle() ? 'checked="checked"' : '') . '/> Activate remote database connection</label>';
-		}
-
-		/**
-		* Renders the RPS URL input field & populates it with saved data
-		*
-		* @return 	string
-		* @since    0.5.0
-		*/
-		public function rps_url_input() {
-			printf(
-				'<input type="text" id="rps_url" name="rps-db-url[rps_url]" value="%s" style="width: 300px; height: 35px;" placeholder="http://yourwebsite.com"/>',
-				( RPS_Base::rps_return_url() ? esc_url( RPS_Base::rps_return_url() ) : '' )
-			);
-		}
-
-		/**
 		* Loads the landing page markup from admin partials
 		*
 		* @return	file
@@ -162,16 +71,26 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		}
 
 		/**
+		* AJAX Function to delete all RPS post meta
+		*
+		* @return	null
+		* @since    0.5.0
+		*/
+		public function rps_flush_meta() {
+			delete_post_meta_by_key( RPS_Base::$rps_meta );
+		}
+
+		/**
 		* Renders the admin notices to indicate the db connection status
 		*
 		* @return	string
 		* @since    0.5.0
 		*/
-		private function rps_render_connection_notice() {
+		public static function rps_render_connection_notice() {
 			if(RPS_Base::rps_check_connection()) {
 				$class = "notice-success";
 				$msg = __('Remote Database Connection is active', RPS_SLUG);
-			} elseif(RPS_Base::rps_return_toggle() && ! RPS_Base::rps_return_url()) {
+			} elseif(RPS_Base::rps_return_option('rps_toggle') && ! RPS_Base::rps_return_option('rps_url')) {
 				$class = 'notice-error';
 				$msg = __('Your database connection is turned on but you have not provided a valid URL to connect to.', RPS_SLUG);
 			} else {
@@ -180,16 +99,6 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 			}
 
 			echo '<div class="notice is-dismissible ' . $class . '" style="padding: 15px; margin-top: 30px; margin-left: 0;">' . $msg . '</div>';
-		}
-
-		/**
-		* AJAX Function to delete all RPS post meta
-		*
-		* @return	null
-		* @since    0.5.0
-		*/
-		public function rps_flush_meta() {
-			delete_post_meta_by_key( RPS_Base::$rps_meta );
 		}
 	}
 

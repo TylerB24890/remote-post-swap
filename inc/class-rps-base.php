@@ -39,7 +39,7 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @since    0.5.0
 		*/
 		public function __construct() {
-			self::$options = get_option('rps-db-url');
+			self::$options = get_option('rps-connection-settings');
 
 			self::$rps_meta = 'rps_post_id';
 		}
@@ -51,7 +51,7 @@ if(!class_exists('RPS\RPS_Base')) :
 		* @since    0.5.0
 		*/
 		public static function rps_check_connection() {
-			if(self::rps_return_toggle() && self::rps_return_url()) {
+			if(self::rps_return_option('rps_toggle') && self::rps_return_option('rps_url')) {
 				return true;
 			}
 
@@ -59,27 +59,24 @@ if(!class_exists('RPS\RPS_Base')) :
 		}
 
 		/**
-		* Check if the user has the remote database connection turned on
+		* Returns a user set option from the WP Settings API.
 		*
-		* @return	bool
-		* @since    0.5.0
-		*/
-		public static function rps_return_toggle() {
-			if(isset(self::$options['rps_toggle']) && self::$options['rps_toggle'] === true)
-			return true;
-
-			return false;
-		}
-
-		/**
-		* Check if the user has entered a remote database connection URL
-		*
+		* @param   $option - string - Which option to return?
 		* @return	string || bool
-		* @since    0.5.0
+		* @since    0.7.0
 		*/
-		public static function rps_return_url() {
-			if(isset(self::$options['rps_url']) && strlen(self::$options['rps_url']) > 1)
-			return self::rps_fix_url(self::$options['rps_url']);
+		public static function rps_return_option($option) {
+			if(strpos($option, 'rps_') === false) {
+				$option = 'rps_' . $option;
+			}
+
+			if($option === 'rps_toggle') {
+				if(isset(self::$options[$option]) && self::$options[$option] === true)
+				return true;
+			} else {
+				if(isset(self::$options[$option]) && strlen(self::$options[$option]) >= 1)
+				return ($option === 'rps_url' ? self::rps_fix_url(self::$options[$option]) : self::$options[$option]);
+			}
 
 			return false;
 		}
