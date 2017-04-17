@@ -45,47 +45,17 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			if(is_admin())
 			return $posts;
 
-			if(is_single() && RPS_Base::rps_get_post_meta($posts[0]->ID)) {
-				$posts = $this->rps_swap_single_post($posts[0]);
-			} else {
-				$posts = $this->rps_swap_loop_posts($posts);
-			}
-
-			return $posts;
+			return $this->rps_setup_api_data($posts);
 		}
 
 		/**
-		* Swap a single posts content with it's API partner
-		*
-		* @param  $post - object - WP Post Object
-		* @param  $rps_id - int - ID of the remote post to retrieve
-		* @return  $posts - WP Post Object
-		* @since    0.5.0
-		*/
-		private function rps_swap_single_post($post, $rps_id = NULL) {
-
-			if($rps_id === NULL)
-			$rps_id = RPS_Base::rps_get_post_meta($post->ID);
-
-			$rpsp = $this->rps_get_api_data($rps_id);
-
-			$post->post_content = RPS_Post_Media::rps_adjust_media_urls($rpsp->content->rendered);
-			$post->post_title = $rpsp->title->rendered;
-			$post->post_date = $rpsp->date;
-
-			$posts[0] = $post;
-
-			return $posts;
-		}
-
-		/**
-		* Swap the post content within the loops
+		* Sets up the API & Original Post Data for Display
 		*
 		* @param  $posts - object - WP Posts Object
 		* @return  $posts - WP Post Object
-		* @since    0.5.0
+		* @since    0.8.0
 		*/
-		private function rps_swap_loop_posts($posts) {
+		private function rps_setup_api_data($posts) {
 			// Get the total post count queried
 			$post_count = count($posts);
 			// Array of already saved post IDs from the API
@@ -112,17 +82,18 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			);
 
 			if($num_posts > 0) {
+				// If num_posts is greater than one, reset the default API request args
+				$rps_args = array(
+					'per_page' => $num_posts,
+				);
+
 				if($rps_count > 0) {
 					$rps_args = array(
-						'per_page' => $num_posts,
 						'exclude' => $rps_retrieve
 					);
 
+					// Get saved posts from API
 					$rps_saved = $this->rps_get_api_data(null, 'posts', array('include' => $rps_retrieve));
-				} else {
-					$rps_args = array(
-						'per_page' => $num_posts,
-					);
 				}
 			} else {
 				$rps_args = array(
@@ -140,45 +111,73 @@ if(!class_exists('RPS\RPS_Replace_WP')) :
 			// If we have any new posts at all
 			if($rpsp && !empty($rpsp)) {
 				// Set the array for the API posts
-				$rps_posts = array();
+				$rps_posts = $this->rps_setup_rps_posts($rpsp);
+				// Swap the original post data with the API post data
+				$posts = $this->rps_change_post_content($posts, $rps_posts);
+			}
 
-				// Set the "New Post Counter" variable
-				$npc = 0;
+			return $posts;
+		}
 
-				// Loop through returned API posts and assign new array data
-				foreach($rpsp as $rps_post) {
+		/**
+		* Create the array of post data from the API response
+		*
+		* @param  $rpsp - object - API Response
+		* @return  $rps_posts - Array of post data returned from the API response
+		* @since    0.8.0
+		*/
+		private function rps_setup_rps_posts($rpsp) {
 
-					$rps_posts[$npc]['post_id'] = $rps_post->id;
-					$rps_posts[$npc]['post_title'] = $rps_post->title->rendered;
-					$rps_posts[$npc]['post_excerpt'] = $rps_post->excerpt->rendered;
-					$rps_posts[$npc]['post_content'] = RPS_Post_Media::rps_adjust_media_urls($rps_post->content->rendered);
-					$rps_posts[$npc]['post_date'] = $rps_post->date;
+			$rps_posts = array();
 
-					$npc++;
-				}
+			// Set the "New Post Counter" variable
+			$npc = 0;
 
-				// Set the "Original Post Counter" variable
-				$opc = 0;
-				foreach($posts as $post) {
+			// Loop through returned API posts and assign new array data
+			foreach($rpsp as $rps_post) {
 
-					// Loop through original post object and replace data with returned API data
-					if(RPS_Base::rps_return_option('post_title'))
-					$post->post_title = $rps_posts[$opc]['post_title'];
+				$rps_posts[$npc]['post_id'] = $rps_post->id;
+				$rps_posts[$npc]['post_title'] = $rps_post->title->rendered;
+				$rps_posts[$npc]['post_excerpt'] = $rps_post->excerpt->rendered;
+				$rps_posts[$npc]['post_content'] = RPS_Post_Media::rps_adjust_media_urls($rps_post->content->rendered);
+				$rps_posts[$npc]['post_date'] = $rps_post->date;
 
-					if(RPS_Base::rps_return_option('post_content'))
-					$post->post_content = $rps_posts[$opc]['post_content'];
+				$npc++;
+			}
 
-					if(RPS_Base::rps_return_option('post_date'))
-					$post->post_date = $rps_posts[$opc]['post_date'];
+			return $rps_posts;
+		}
 
-					if(RPS_Base::rps_return_option('post_excerpt'))
-					$post->post_excerpt = $rps_posts[$opc]['post_excerpt'];
+		/**
+		* Swap out the original post data with the API response post data
+		*
+		* @param  $posts - object - WP Post Object
+		* @return  $rps_posts - Array of post data returned from the API response & formatted through rps_setup_api_data()
+		* @since    0.8.0
+		*/
+		private function rps_change_post_content($posts, $rps_posts) {
+			// Set the "Original Post Counter" variable
+			$opc = 0;
 
-					if($this->rps_ensure_unqiue_meta($rps_posts[$opc]['post_id']))
-					update_post_meta($post->ID, RPS_Base::$rps_meta, $rps_posts[$opc]['post_id']);
+			foreach($posts as $post) {
 
-					$opc++;
-				}
+				// Loop through original post object and replace data with returned API data
+				if(RPS_Base::rps_return_option('post_title'))
+				$post->post_title = $rps_posts[$opc]['post_title'];
+
+				if(RPS_Base::rps_return_option('post_content'))
+				$post->post_content = $rps_posts[$opc]['post_content'];
+
+				if(RPS_Base::rps_return_option('post_date'))
+				$post->post_date = $rps_posts[$opc]['post_date'];
+
+				if(RPS_Base::rps_return_option('post_excerpt'))
+				$post->post_excerpt = $rps_posts[$opc]['post_excerpt'];
+
+				if($this->rps_ensure_unqiue_meta($rps_posts[$opc]['post_id']))
+				update_post_meta($post->ID, RPS_Base::$rps_meta, $rps_posts[$opc]['post_id']);
+
+				$opc++;
 			}
 
 			return $posts;
