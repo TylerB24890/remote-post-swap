@@ -54,9 +54,9 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 			$id = (strlen($id) > 0 ? '/' . $id : $id);
 			$filter_str = $this->rps_process_filters($filters);
 
-			$url = $this->rps_base_url . $type;
+			$url = $this->rps_base_url . $type . $id . $filter_str;
 
-			$resp = wp_remote_get($url . $id . $filter_str);
+			$resp = wp_remote_get($url);
 
 			if(is_wp_error( $resp )) {
 				return false;
