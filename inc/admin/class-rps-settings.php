@@ -163,7 +163,7 @@ if(!class_exists('RPS\Admin\RPS_Settings')) :
 			foreach($input as $k => $v) {
 				if($k === 'rps_url') {
 					if(RPS_Base::rps_return_option($k) != $input[$k])
-					$this->rps_flush_meta();
+					RPS_Admin::rps_flush_meta();
 
 					$new_input[$k] = esc_url_raw($input[$k]);
 				} else {

@@ -38,8 +38,8 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 			// Init the settings
 			new \RPS\Admin\RPS_Settings;
 
-			add_action( 'wp_ajax_rps_delete_meta', array($this, 'rps_flush_meta') );
-			add_action( 'wp_ajax_nopriv_rps_delete_meta', array($this, 'rps_flush_meta' ));
+			add_action( 'wp_ajax_rps_delete_meta', array(__CLASS__, 'rps_flush_meta') );
+			add_action( 'wp_ajax_nopriv_rps_delete_meta', array(__CLASS__, 'rps_flush_meta' ));
 		}
 
 		/**
@@ -76,7 +76,7 @@ if(!class_exists('RPS\Admin\RPS_Admin')) :
 		* @return	null
 		* @since    0.5.0
 		*/
-		public function rps_flush_meta() {
+		public static function rps_flush_meta() {
 			delete_post_meta_by_key( RPS_Base::$rps_meta );
 		}
 

@@ -10,7 +10,6 @@
 */
 
 namespace RPS;
-use RPS\RPS_Base;
 
 defined( 'ABSPATH' ) or die( 'No script kiddies please!' );
 
@@ -76,7 +75,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		* @return	$posts - array - Array of post data returned from API
 		* @since    0.5.0
 		*/
-		protected function rps_get_posts($id, $filters = array()) {
+		public function rps_get_posts($id, $filters = array()) {
 
 			$posts = false;
 
@@ -120,7 +119,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		* @return	$users - array - array of user data returned from API
 		* @since    0.5.0
 		*/
-		protected function rps_get_users($id = NULL) {
+		public function rps_get_users($id = NULL) {
 
 			$users = false;
 
@@ -149,7 +148,7 @@ if(!class_exists('RPS\RPS_Retrieve_Data')) :
 		* @return	$media - array - array of media data returned from API
 		* @since    0.5.0
 		*/
-		protected function rps_get_media($id) {
+		public function rps_get_media($id) {
 
 			$media = false;
 
